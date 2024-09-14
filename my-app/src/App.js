@@ -34,23 +34,19 @@ function App() {
           .map(index => results.poseLandmarks[index]), { visibilityMin: 0.65, color: 'white', fillColor: 'white' });
 
     console.log(results.poseLandmarks);
+    console.log(JSON.stringify(results.poseLandmarks));
 
-    // attempt at post request
-    try {
-      fetch('http://localhost:5000/setVectors/4', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(pose.landmarks),
-      });
-    } catch (error) {
-      console.error('Error:', error);
-    }
+    setLandmarks(results.poseLandmarks);
 
    }
     canvasCtx.restore();
   }
+
+  useEffect(() => {
+    fetch("http://localhost:5000/setVectors/" + JSON.stringify(landmarks)).then((response) => response.json).then(j => {
+      console.log(j);
+    })
+  }, [landmarks]);
 
   useEffect(() => {
     if(!didLoad){
