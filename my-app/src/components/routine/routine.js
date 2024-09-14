@@ -54,7 +54,7 @@ function Routine() {
         console.log('Backend Entries:', positions);
 
         // Send data to the backend
-        fetch("http://localhost:5000/setRoutine/" + encodeURIComponent(JSON.stringify(positions)))
+        fetch("http://localhost:5000/setRoutine/" + (JSON.stringify(positions)))
             .then(response => response.json())
             .then(j => {
                 console.log(j, "Was sent to Flask");

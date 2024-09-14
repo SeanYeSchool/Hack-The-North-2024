@@ -1,4 +1,4 @@
-from flask import Flask, request
+from flask import Flask
 from flask_cors import CORS
 import json
 import pandas as pd
@@ -13,14 +13,14 @@ CORS(app)
 model = None
 routineIds = None
 
-def load_model():
-    global model
-    model = pose_rec_model(3, 128, 32, 5, 16, 8, 0.2)
-    model.load_state_dict(torch.load("backend/test_model_80.pt", weights_only=False)) 
+# def load_model():
+#     global model
+#     model = pose_rec_model(3, 128, 32, 5, 16, 8, 0.2)
+#     model.load_state_dict(torch.load("backend/test_model_80.pt", weights_only=False)) 
 
-@app.before_first_request
-def initialize():
-    load_model()
+# @app.before_first_request
+# def initialize():
+#     load_model()
 
 @app.route("/setRoutine/<string:routine_json>", methods=['GET'])
 def setRoutine(routine_json):
@@ -29,7 +29,7 @@ def setRoutine(routine_json):
     routineIds = []
     for routine in routine_list:
         routineIds.append(pose_map[routine])
-    return True
+    return f"GET {routine_list}"
 
 @app.route("/setVectors/<string:vectors_json>", methods=['GET'])
 def setVector(vectors_json):
