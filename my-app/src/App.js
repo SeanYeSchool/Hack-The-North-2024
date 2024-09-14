@@ -1,14 +1,12 @@
 import "./App.css";
 import {useRef, useEffect, useState} from "react"
 
-import SidePanel from "./components/home/home.js";
-import Canvas from "./components/canvas/canvas.js";
+import Home from "./components/home/home.js";
 
 function App() {
   return <div className="App">
     <div className="container">
-      <Canvas />
-      <SidePanel/>
+      <Home/>
     </div>
   </div>;
 }

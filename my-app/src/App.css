@@ -16,9 +16,10 @@
 }
 
 .output_canvas {
+  border-radius: 1%;
   width: 80%;
   height: 100%;
-  margin: 1%;
+  margin: 2% 1%;
   display: block;
   position: relative;
   left: 0;
