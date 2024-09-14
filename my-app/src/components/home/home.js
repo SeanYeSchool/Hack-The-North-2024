@@ -2,7 +2,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import React from 'react';
 import Button from 'react-bootstrap/Button'
 
-const Side_Panel = () => {
+const SidePanel = () => {
     return (
     <div className="container">
         <Button> 
@@ -12,4 +12,4 @@ const Side_Panel = () => {
     );
 }
 
-export default Side_Panel
+export default SidePanel

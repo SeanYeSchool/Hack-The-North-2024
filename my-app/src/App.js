@@ -5,7 +5,7 @@ import * as cam from "@mediapipe/camera_utils"
 import * as drawingUtils from "@mediapipe/drawing_utils"
 import {useRef, useEffect, useState} from "react"
 
-import Side_Panel from "./components/home/home.js"
+import SidePanel from "./components/home/home.js"
 
 function App() {
   const webcamRef = useRef(null)
@@ -97,7 +97,7 @@ function App() {
     <div className="container">
       <video className="input_video" ref={webcamRef}/>
       <canvas ref={canvasRef} className='output_canvas' ></canvas>
-      <Side_Panel/>
+      <SidePanel/>
     </div>
   </div>;
 }
