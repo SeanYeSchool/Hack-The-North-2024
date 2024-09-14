@@ -34,18 +34,14 @@ function Canvas(){
   
       console.log(results.poseLandmarks);
       console.log(JSON.stringify(results.poseLandmarks));
-  
+
       setLandmarks(results.poseLandmarks);
-  
+      fetch("http://localhost:5000/setVectors/" + JSON.stringify(results.poseLandmarks)).then((response) => response.json).then(j => {
+        console.log(j, "Was sent to Flask");
+      })
      }
       canvasCtx.restore();
     }
-  
-    useEffect(() => {
-      fetch("http://localhost:5000/setVectors/" + JSON.stringify(landmarks)).then((response) => response.json).then(j => {
-        console.log(j);
-      })
-    }, [landmarks]);
   
     useEffect(() => {
       if(!didLoad){
