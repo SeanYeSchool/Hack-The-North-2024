@@ -1,8 +1,9 @@
 from flask import Flask
 from flask_cors import CORS
 import json
-app = Flask(__name__)
 
+app = Flask(__name__)
+CORS(app)
 
 @app.route("/setVectors/<string:vectors_json>")
 def setVector(vectors_json):

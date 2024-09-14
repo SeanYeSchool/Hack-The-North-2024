@@ -37,7 +37,7 @@ function App() {
 
     // attempt at post request
     try {
-      fetch('http://localhost:5000/getVector/4/3', {
+      fetch('http://localhost:5000/setVectors/4', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
