@@ -1,6 +1,7 @@
 import mediapipe as mp
 import cv2
 from paths import IMG_TRAIN_DIR, IMG_TEST_DIR
+import pandas as pd
 
 mp_pose = mp.solutions.pose
 mp_drawing = mp.solutions.drawing_utils
@@ -12,7 +13,6 @@ for directory in IMG_TRAIN_DIR.iterdir():
     yoga_type = directory.name
     for image_path in directory.iterdir():
         image = cv2.imread(image_path)
-
         image_rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
         landmarks = pose.process(image_rgb).pose_landmarks
 
@@ -29,6 +29,9 @@ for directory in IMG_TRAIN_DIR.iterdir():
 
         row['pose'] = yoga_type
         train_data.append(row)
+
+train_df = pd.DataFrame(train_data)
+train_df.to_csv("TRAIN_DF.csv", index=False)
 
 for directory in IMG_TEST_DIR.iterdir():
     yoga_type = directory.name
@@ -50,4 +53,8 @@ for directory in IMG_TEST_DIR.iterdir():
             row[f'z_{i}'] = keypoints[i][2]
 
         row['pose'] = yoga_type
-        train_data.append(row)
+        test_data.append(row)
+
+
+test_df = pd.DataFrame(train_data)
+test_df.to_csv("TEST_DF.csv", index=False)
