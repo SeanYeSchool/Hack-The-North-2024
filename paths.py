@@ -1,0 +1,9 @@
+from pathlib import Path
+
+BASE_DIR = Path.cwd()
+
+IMG_DATASET_DIR = BASE_DIR / "IMG_DATASET"
+
+IMG_TEST_DIR = IMG_DATASET_DIR / "TEST"
+IMG_TRAIN_DIR = IMG_DATASET_DIR / "TRAIN"
+

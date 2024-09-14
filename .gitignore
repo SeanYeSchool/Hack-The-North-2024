@@ -3,6 +3,9 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+# image dataset. too big
+IMG_DATASET
+
 # C extensions
 *.so
 
