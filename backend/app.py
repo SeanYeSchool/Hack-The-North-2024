@@ -16,7 +16,7 @@ def setVector(vectors_json):
     with open("vectors.txt", "w") as f:
         accumulator = ""
         for vector in vectors_list:
-            accumulator += f"{vector[0]} {vector[1]} {vector[2]} {vector[3]}\n"
+            accumulator += f"{vector["x"]} {vector["y"]} {vector["z"]} {vector["visibility"]}\n"
 
         accumulator = accumulator.strip("\n")
         f.write(accumulator)
