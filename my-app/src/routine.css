@@ -1,0 +1,14 @@
+
+.main{
+    width: 100vw;
+}
+
+.table{
+    margin-top: 2%;
+    display: flex;
+    justify-content: center;
+}
+
+.hidden-option {
+    display: none;
+}
