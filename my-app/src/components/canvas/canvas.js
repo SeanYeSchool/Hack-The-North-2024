@@ -57,9 +57,6 @@ function Canvas() {
         { visibilityMin: 0.65, color: "white", fillColor: "white" }
       );
 
-      console.log(results.poseLandmarks);
-      console.log(JSON.stringify(results.poseLandmarks));
-
       setLandmarks(results.poseLandmarks);
       fetch(
         "http://localhost:5000/setVectors/" +

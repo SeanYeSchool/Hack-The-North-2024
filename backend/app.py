@@ -10,17 +10,10 @@ from variables import pose_map
 app = Flask(__name__)
 CORS(app)
 
-model = None
+global model
+model = pose_rec_model(3, 128, 32, 5, 16, 8, 0.2)
+model.load_state_dict(torch.load("test_model_80.pt", weights_only=False)) 
 routineIds = None
-
-def load_model():
-    global model
-    model = pose_rec_model(3, 128, 32, 5, 16, 8, 0.2)
-    model.load_state_dict(torch.load("backend/test_model_80.pt", weights_only=False)) 
-
-@app.before_first_request
-def initialize():
-    load_model()
 
 @app.route("/setRoutine/<string:routine_json>", methods=['GET'])
 def setRoutine(routine_json):
@@ -52,3 +45,6 @@ def setVector(vectors_json):
 def getComment(comment):
     #TODO: put voiceflow api thingy
     return f"Post {comment}"
+
+if __name__ == "__main__":
+    app.run(debug=True, port=5000)

@@ -1,8 +1,7 @@
 import numpy as np
 import torch
-from model import pose_rec_model
 from dataset import create_edge_index
-from variables import pose_map, keypoint_end, keypoint_start, bodypart_angle_dict
+from variables import keypoint_end, keypoint_start, bodypart_angle_dict
 import pandas as pd
 from calculate_avg_angle import calculate_angle_from_nodes_3d
 
