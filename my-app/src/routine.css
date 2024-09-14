@@ -1,12 +1,39 @@
 
 .main{
     width: 100vw;
+    overflow-y: scroll;
 }
 
 .table{
     margin-top: 2%;
     display: flex;
     justify-content: center;
+    text-align: center;
+}
+
+.headers{
+    font-size: 24px;
+}
+
+.add-row{
+    font-size: 18px;
+}
+
+tr td{
+    font-size: 18px
+}
+
+.row-counter{
+    border-right: 1px solid black;
+}
+
+.del-button{
+    padding: 0 15px;
+    font-weight: bold;
+}
+
+option{
+    text-align: center;
 }
 
 .hidden-option {

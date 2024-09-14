@@ -35,7 +35,6 @@ function App() {
               <UserButton></UserButton>
               <Temp></Temp>
             </Authenticated>
-            <Link to="/routine">Go to routine</Link>
               <Routes>
                 <Route path="/" element = {<Home />} />
                 <Route path="/routine" element={<Routine />} />
