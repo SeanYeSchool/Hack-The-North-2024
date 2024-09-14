@@ -3,12 +3,12 @@ from model import pose_rec_model
 import torch
 from train import train, test
 
-train_dataloader, test_dataloader = get_dataloader("TRAIN_DF_SAMPLE.csv", "train_folder/", False), get_dataloader("TEST_DF_SAMPLE.csv", "test_folder/", True)
-model = pose_rec_model(3, 64, 16, 5, 8, 4, 0.35)
+train_dataloader, test_dataloader = get_dataloader("TRAIN_DF_SAMPLE.csv", "backend/train_folder/", False), get_dataloader("TEST_DF_SAMPLE.csv", "backend/test_folder/", True)
+model = pose_rec_model(3, 128, 32, 5, 16, 8, 0.2)
 criterion = torch.nn.CrossEntropyLoss()
-optimizer = torch.optim.Adam(model.parameters(), lr=0.01)
+optimizer = torch.optim.Adam(model.parameters(), lr=0.005)
 
-epochs = 20
+epochs = 100
 
 for epoch in range(epochs):
     loss, accuracy = train(model, train_dataloader, criterion, optimizer)

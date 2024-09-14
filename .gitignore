@@ -8,8 +8,8 @@ __pycache__/
 
 # image dataset. too big
 IMG_DATASET
-test_folder
-train_folder
+backend/test_folder/processed
+backend/train_folder/processed
 
 # C extensions
 *.so
