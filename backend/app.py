@@ -20,7 +20,7 @@ def setVector(vectors_json):
 
         accumulator = accumulator.strip("\n")
         f.write(accumulator)
-
+    
     return f"Post {accumulator}"
 
 @app.route("/getComment/<string:comment>")
