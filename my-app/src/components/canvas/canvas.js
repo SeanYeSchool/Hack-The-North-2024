@@ -1,274 +1,95 @@
-import "../../routine.css";
-import React, { useState, useEffect } from 'react';
-import { DndProvider, useDrag, useDrop } from 'react-dnd';
-import { HTML5Backend } from 'react-dnd-html5-backend';
-import Modal from 'react-modal';
+import * as pose from '@mediapipe/pose'
+import smoothLandmarks from 'mediapipe-pose-smooth'; // ES6
+import * as cam from "@mediapipe/camera_utils"
+import * as drawingUtils from "@mediapipe/drawing_utils"
+import {useRef, useEffect, useState} from "react"
 
-// Set up Modal root element
-Modal.setAppElement('#root');
+function Canvas(){
+    const webcamRef = useRef(null)
+    const canvasRef = useRef(null)
+    var camera = null
+    const [didLoad, setdidLoad] = useState(false)
+  
+    const [landmarks, setLandmarks] = useState([]);
+  
+    function onResults(results){
+      const canvasElement = canvasRef.current
+      const canvasCtx = canvasElement.getContext("2d")
+  
+      canvasCtx.save();
+      canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
+      canvasCtx.drawImage(results.image, 0, 0, canvasElement.width, canvasElement.height);
+  
+      if (results.poseLandmarks) {
+        drawingUtils.drawConnectors(canvasCtx, results.poseLandmarks, pose.POSE_CONNECTIONS, { visibilityMin: 0.65, color: 'white' });
+        drawingUtils.drawLandmarks(canvasCtx, Object.values(pose.POSE_LANDMARKS_LEFT)
+            .map(index => results.poseLandmarks[index]), { visibilityMin: 0.65, color: 'white', fillColor: 'blue' });
+  
+        drawingUtils.drawLandmarks(canvasCtx, Object.values(pose.POSE_LANDMARKS_RIGHT)
+            .map(index => results.poseLandmarks[index]), { visibilityMin: 0.65, color: 'white', fillColor: 'red' });
+  
+  
+        drawingUtils.drawLandmarks(canvasCtx, Object.values(pose.POSE_LANDMARKS_NEUTRAL)
+            .map(index => results.poseLandmarks[index]), { visibilityMin: 0.65, color: 'white', fillColor: 'white' });
+  
+      console.log(results.poseLandmarks);
+      console.log(JSON.stringify(results.poseLandmarks));
 
-// Define styles for the modal
-const customModalStyles = {
-    content: {
-        top: '50%',
-        left: '50%',
-        right: 'auto',
-        bottom: 'auto',
-        transform: 'translate(-50%, -50%)',
-        width: '300px', // Adjust width for a smaller modal
-        padding: '20px',
-        borderRadius: '8px',
-        overflow: 'hidden', // Hide overflow to prevent scrollbars in modal
-    },
-};
-
-// Function to lock or unlock body scroll
-const toggleBodyScroll = (lock) => {
-    if (lock) {
-        document.body.style.overflowY = 'hidden'; // Lock y-scroll only
-    } else {
-        document.body.style.overflowY = 'auto'; // Unlock y-scroll
+      setLandmarks(results.poseLandmarks);
+      fetch("http://localhost:5000/setVectors/" + JSON.stringify(results.poseLandmarks)).then((response) => response.json).then(j => {
+        console.log(j, "Was sent to Flask");
+      })
+     }
+      canvasCtx.restore();
     }
-    document.body.style.overflowX = 'hidden'; // Always lock x-scroll
-};
-
-function Routine() {
-    const [entries, setEntries] = useState([]);
-    const [backendEntries, setBackendEntries] = useState([]);
-    const [selectedPosition, setSelectedPosition] = useState('');
-    const [time, setTime] = useState("5");
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [editIndex, setEditIndex] = useState(null);
-    const [editPosition, setEditPosition] = useState('');
-    const [editTime, setEditTime] = useState('5');
-
+  
     useEffect(() => {
-        toggleBodyScroll(isModalOpen);
-        return () => toggleBodyScroll(false); // Ensure scroll is unlocked when modal closes
-    }, [isModalOpen]);
-
-    useEffect(() => {
-        // Extract positions and update backendEntries
-        const positions = entries.map(entry => entry.position);
-        setBackendEntries(positions);
-        console.log('Backend Entries:', positions);
-
-        // Send data to the backend
-        fetch("http://localhost:5000/setVectors/" + encodeURIComponent(JSON.stringify(positions)))
-            .then(response => response.json())
-            .then(j => {
-                console.log(j, "Was sent to Flask");
-            })
-            .catch(error => {
-                console.error('Error sending data to backend:', error);
-            });
-    }, [entries]);
-
-    const addEntry = () => {
-        if (selectedPosition) {
-            const newEntry = {
-                position: selectedPosition,
-                time: time
-            };
-
-            setEntries([...entries, newEntry]);
-
-            setSelectedPosition('');
-            setTime("5");
-        } else {
-            alert("Please select a position");
-        }
-    };
-
-    const deleteEntry = (indexToRemove) => {
-        setEntries(entries.filter((_, index) => index !== indexToRemove));
-    };
-
-    const moveRow = (dragIndex, hoverIndex) => {
-        const dragEntry = entries[dragIndex];
-        const newEntries = [...entries];
-        newEntries.splice(dragIndex, 1);
-        newEntries.splice(hoverIndex, 0, dragEntry);
-        setEntries(newEntries);
-    };
-
-    const openEditModal = (index) => {
-        setEditIndex(index);
-        setEditPosition(entries[index].position);
-        setEditTime(entries[index].time);
-        setIsModalOpen(true);
-    };
-
-    const closeEditModal = () => {
-        setIsModalOpen(false);
-        setEditIndex(null);
-    };
-
-    const saveEdit = () => {
-        const updatedEntries = [...entries];
-        updatedEntries[editIndex] = {
-            position: editPosition,
-            time: editTime
-        };
-        setEntries(updatedEntries);
-        closeEditModal();
-    };
-
-    return (
-        <DndProvider backend={HTML5Backend}>
-            <div className="main">
-                <h1>Routine Tracker</h1>
-
-                <div className="table">
-                    <table>
-                        <thead>
-                            <tr className="headers">
-                                <th className="row-counter">#</th>
-                                <th>Position</th>
-                                <th>Time</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr className="add-row">
-                                <td className="row-counter"></td>
-                                <td>
-                                    <Dropdown 
-                                        selectedPosition={selectedPosition} 
-                                        setSelectedPosition={setSelectedPosition} 
-                                    />
-                                </td>
-                                <td>
-                                    <Slider 
-                                        time={time} 
-                                        setTime={setTime} 
-                                    />
-                                </td>
-                                <td>
-                                    <Button onClick={addEntry} />
-                                </td>
-                            </tr>
-                            {entries.map((entry, index) => (
-                                <DraggableRow
-                                    key={index}
-                                    index={index}
-                                    entry={entry}
-                                    moveRow={moveRow}
-                                    deleteEntry={() => deleteEntry(index)}
-                                    openEditModal={() => openEditModal(index)}
-                                />
-                            ))}
-                        </tbody>
-                    </table>
-                </div>
-
-                {/* Modal for editing */}
-                <Modal
-                    isOpen={isModalOpen}
-                    onRequestClose={closeEditModal}
-                    contentLabel="Edit Entry"
-                    style={customModalStyles}
-                >
-                    <h2>Edit Entry</h2>
-                    <label>
-                        Position:
-                        <Dropdown 
-                            selectedPosition={editPosition} 
-                            setSelectedPosition={setEditPosition} 
-                            isModal={true}
-                        />
-                    </label>
-                    <br />
-                    <label>
-                        Time:
-                        <Slider 
-                            time={editTime} 
-                            setTime={setEditTime} 
-                            isModal={true}
-                        />
-                    </label>
-                    <br />
-                    <button onClick={saveEdit}>Save</button>
-                    <button onClick={closeEditModal}>Cancel</button>
-                </Modal>
-            </div>
-        </DndProvider>
-    );
-}
-
-function DraggableRow({ entry, index, moveRow, deleteEntry, openEditModal }) {
-    const [, ref] = useDrag({
-        type: 'ROW',
-        item: { index },
-    });
-
-    const [, drop] = useDrop({
-        accept: 'ROW',
-        hover: (item) => {
-            if (item.index !== index) {
-                moveRow(item.index, index);
-                item.index = index;
+      if(!didLoad){
+        const mpPose = new pose.Pose({
+          locateFile: (file) => {
+              return `https://cdn.jsdelivr.net/npm/@mediapipe/pose/${file}`;
+          },
+        });
+        mpPose.setOptions({
+          selfieMode: true,
+          modelComplexity: 1,
+          smoothLandmarks: true,
+          enableSegmentation: false,
+          smoothSegmentation: true,
+          minDetectionConfidence: 0.5,
+          minTrackingConfidence: 0.5,
+        });
+  
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        camera = new cam.Camera(webcamRef.current, {
+          onFrame:async() => {
+            const canvasElement = canvasRef.current
+            const aspect = window.innerHeight / window.innerWidth;
+            let width, height;
+            if (window.innerWidth > window.innerHeight) {
+                height = window.innerHeight;
+                width = height / aspect;
             }
-        },
-    });
+            else {
+                width = window.innerWidth;
+                height = width * aspect;
+            }
+            canvasElement.width = width;
+            canvasElement.height = height;
+            await mpPose.send({image: webcamRef.current});
+          }
+        })
+        camera.start();
+  
+        mpPose.onResults((results) => smoothLandmarks(results, onResults));
+        setdidLoad(true)
+      }
+    },[didLoad])
+  
+    return <>
+        <video className="input_video" ref={webcamRef}/>
+        <canvas ref={canvasRef} className='output_canvas' ></canvas>
+    </>;
+  }
 
-    return (
-        <tr ref={(node) => ref(drop(node))}>
-            <td className="row-counter">{index + 1}</td>
-            <td>{entry.position}</td>
-            <td>{entry.time} sec</td>
-            <td>
-                <button className='edit-button' onClick={openEditModal}>Edit</button>
-                <button className='del-button' onClick={deleteEntry}>-</button>
-            </td>
-        </tr>
-    );
-}
-
-function Slider({ time, setTime, isModal }) {
-    const handleChange = (event) => {
-        setTime(event.target.value);
-    };
-
-    return (
-        <div>
-            <input
-                type="range"
-                min="5"
-                max="120"
-                step="5"
-                value={time}
-                onChange={handleChange}
-            />
-            <p>{time} seconds</p>
-        </div>
-    );
-}
-
-function Dropdown({ selectedPosition, setSelectedPosition, isModal }) {
-    const handleChange = (event) => {
-        setSelectedPosition(event.target.value);
-    };
-
-    return (
-        <div>
-            <select value={selectedPosition} onChange={handleChange}>
-                <option value="" disabled={isModal} className="hidden-option">Positions</option>
-                <option value="Doggy 1">Doggy 1</option>
-                <option value="Doggy 2">Doggy 2</option>
-                <option value="Doggy 3">Doggy 3</option>
-                <option value="Doggy 4">Doggy 4</option>
-            </select>
-        </div>
-    );
-}
-
-function Button({ onClick }) {
-    return (
-        <button onClick={onClick}>
-            Add
-        </button>
-    );
-}
-
-export default Routine;
+export default Canvas;
