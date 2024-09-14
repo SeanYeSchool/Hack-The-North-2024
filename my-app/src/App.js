@@ -11,6 +11,8 @@ function App() {
   var camera = null
   const [didLoad, setdidLoad] = useState(false)
 
+  const [landmarks, setLandmarks] = useState([]);
+
   function onResults(results){
     const canvasElement = canvasRef.current
     const canvasCtx = canvasElement.getContext("2d")
@@ -23,11 +25,30 @@ function App() {
       drawingUtils.drawConnectors(canvasCtx, results.poseLandmarks, pose.POSE_CONNECTIONS, { visibilityMin: 0.65, color: 'white' });
       drawingUtils.drawLandmarks(canvasCtx, Object.values(pose.POSE_LANDMARKS_LEFT)
           .map(index => results.poseLandmarks[index]), { visibilityMin: 0.65, color: 'white', fillColor: 'blue' });
+
       drawingUtils.drawLandmarks(canvasCtx, Object.values(pose.POSE_LANDMARKS_RIGHT)
           .map(index => results.poseLandmarks[index]), { visibilityMin: 0.65, color: 'white', fillColor: 'red' });
+
+
       drawingUtils.drawLandmarks(canvasCtx, Object.values(pose.POSE_LANDMARKS_NEUTRAL)
           .map(index => results.poseLandmarks[index]), { visibilityMin: 0.65, color: 'white', fillColor: 'white' });
+
+    console.log(results.poseLandmarks);
+
+    // attempt at post request
+    try {
+      fetch('http://localhost:5000/getVector/4/3', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(pose.landmarks),
+      });
+    } catch (error) {
+      console.error('Error:', error);
     }
+
+   }
     canvasCtx.restore();
   }
 
