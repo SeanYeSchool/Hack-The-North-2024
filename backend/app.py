@@ -5,6 +5,8 @@ import json
 app = Flask(__name__)
 CORS(app)
 
+routineIds = None
+
 @app.route("/setVectors/<string:vectors_json>", methods=['GET'])
 def setVector(vectors_json):
     '''
@@ -27,3 +29,12 @@ def setVector(vectors_json):
 def getComment(comment):
     #TODO: put voiceflow api thingy
     return f"Post {comment}"
+
+@app.route("/setRoutine/<string:routine_json>", methods=['GET'])
+def setRoutine(routine_json):
+    global routineIds
+    routine_list = json.loads(routine_json)
+    routineIds = []
+    for routine in routine_list:
+        routineIds.append(pose_map[routine])
+    return True

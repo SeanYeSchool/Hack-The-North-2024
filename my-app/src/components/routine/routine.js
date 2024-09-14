@@ -34,6 +34,7 @@ const toggleBodyScroll = (lock) => {
 
 function Routine() {
     const [entries, setEntries] = useState([]);
+    const [backendEntries, setBackendEntries] = useState([]);
     const [selectedPosition, setSelectedPosition] = useState('');
     const [time, setTime] = useState("5");
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -45,6 +46,23 @@ function Routine() {
         toggleBodyScroll(isModalOpen);
         return () => toggleBodyScroll(false); // Ensure scroll is unlocked when modal closes
     }, [isModalOpen]);
+
+    useEffect(() => {
+        // Extract positions and update backendEntries
+        const positions = entries.map(entry => entry.position);
+        setBackendEntries(positions);
+        console.log('Backend Entries:', positions);
+
+        // Send data to the backend
+        fetch("http://localhost:5000/setRoutine/" + encodeURIComponent(JSON.stringify(positions)))
+            .then(response => response.json())
+            .then(j => {
+                console.log(j, "Was sent to Flask");
+            })
+            .catch(error => {
+                console.error('Error sending data to backend:', error);
+            });
+    }, [entries]);
 
     const addEntry = () => {
         if (selectedPosition) {
@@ -96,12 +114,6 @@ function Routine() {
         closeEditModal();
     };
 
-    const handleEditTimeChange = (event) => {
-        let value = Math.round(event.target.value / 5) * 5; // Round to nearest multiple of 5
-        value = Math.max(5, Math.min(value, 120)); // Ensure value is within range
-        setEditTime(value);
-    };
-
     return (
         <DndProvider backend={HTML5Backend}>
             <div className="main">
@@ -136,7 +148,6 @@ function Routine() {
                                     <Button onClick={addEntry} />
                                 </td>
                             </tr>
-                            {/* Render the entries */}
                             {entries.map((entry, index) => (
                                 <DraggableRow
                                     key={index}
