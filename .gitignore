@@ -1,10 +1,12 @@
-#Ignore Vector text file
-vectors.txt
-
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
 *$py.class
+
+# image dataset. too big
+IMG_DATASET
+backend/test_folder/processed
+backend/train_folder/processed
 
 # C extensions
 *.so
