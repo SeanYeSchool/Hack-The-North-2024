@@ -1,9 +1,11 @@
 from flask import Flask
+from flask_cors import CORS
 import json
 app = Flask(__name__)
 
+
 @app.route("/setVectors/<string:vectors_json>")
-def getVector(vectors_json):
+def setVector(vectors_json):
     '''
     [
         [x, y, z, v] list of list of floats
@@ -18,5 +20,10 @@ def getVector(vectors_json):
 
         accumulator = accumulator.strip("\n")
         f.write(accumulator)
-        
+
     return f"Post {accumulator}"
+
+@app.route("/getComment/<string:comment>")
+def getComment(comment):
+    #TODO: put voiceflow api thingy
+    return f"Post {comment}"
