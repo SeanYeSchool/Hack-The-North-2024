@@ -5,6 +5,8 @@ __pycache__/
 
 # image dataset. too big
 IMG_DATASET
+test_folder
+train_folder
 
 # C extensions
 *.so

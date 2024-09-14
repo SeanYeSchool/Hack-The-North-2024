@@ -17,7 +17,7 @@ def create_edge_index(keypoint_start, keypoint_end):
 def create_graph(row, edge_index):
     keypoint_coords = np.array(row.iloc[:3 * 31], dtype=np.float32).reshape(31, 3)
     class_index = pose_map[row.iloc[-1]]
-    x = torch.tensor(keypoint_coords, dype=torch.float32)
+    x = torch.tensor(keypoint_coords, dtype=torch.float32)
     y = torch.tensor(np.asarray([class_index]), dtype=torch.long)
 
     return Data(x=x, edge_index=edge_index, y=y)
@@ -31,7 +31,7 @@ class Dataset(InMemoryDataset):
 
     @property
     def raw_file_names(self):
-        return self.raw_file_names
+        return self.filename
     
     @property 
     def processed_file_names(self):
