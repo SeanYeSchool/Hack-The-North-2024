@@ -5,11 +5,13 @@ import pandas as pd
 from identify import get_angle_diff, get_prediction, read_coords
 from model import pose_rec_model
 import torch
+from variables import pose_map
 
 app = Flask(__name__)
 CORS(app)
 
 model = None
+routineIds = None
 
 def load_model():
     global model
@@ -19,6 +21,15 @@ def load_model():
 @app.before_first_request
 def initialize():
     load_model()
+
+@app.route("/setRoutine/<string:routine_json>", methods=['GET'])
+def setRoutine(routine_json):
+    global routineIds
+    routine_list = json.loads(routine_json)
+    routineIds = []
+    for routine in routine_list:
+        routineIds.append(pose_map[routine])
+    return True
 
 @app.route("/setVectors/<string:vectors_json>", methods=['GET'])
 def setVector(vectors_json):
