@@ -4,7 +4,13 @@ import Yoga from "./components/yoga/yoga.js";
 import Routine from "./components/routine/routine.js";
 import Home from "./components/home/home.js";
 
-import { BrowserRouter as Router, Routes, Route, Link, useNavigate } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Link,
+  useNavigate,
+} from "react-router-dom";
 import { useState } from "react";
 
 import { ConvexProvider, ConvexReactClient } from "convex/react";
@@ -17,7 +23,6 @@ const convex = new ConvexReactClient("https://greedy-warbler-756.convex.cloud");
 
 function App() {
   const [entries, setEntries] = useState([]);
-  const [landmarks, setLandmarks] = useState([]);
 
   return (
     <div className="App">
@@ -27,8 +32,13 @@ function App() {
             <Router>
               <Routes>
                 <Route path="/" element={<Home />} />
-                <Route path="/routine" element={<Routine entries={entries} setEntries={setEntries} />} />
-                <Route path="/canvas" element={<Yoga entries={entries} landmarks={landmarks} setLandmarks={setLandmarks}/>} />
+                <Route
+                  path="/routine"
+                  element={
+                    <Routine entries={entries} setEntries={setEntries} />
+                  }
+                />
+                <Route path="/canvas" element={<Yoga entries={entries} />} />
               </Routes>
               <Navigation />
             </Router>
@@ -57,8 +67,8 @@ function Navigation() {
     <div>
       {currentPage !== "/canvas" && (
         <button className="navigation-button" onClick={handleNextPage}>
-        {currentPage === "/" ? "Go to Routine" : "Go to Yoga"}
-      </button>
+          {currentPage === "/" ? "Go to Routine" : "Go to Yoga"}
+        </button>
       )}
     </div>
   );
