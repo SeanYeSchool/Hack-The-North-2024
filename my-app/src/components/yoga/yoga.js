@@ -27,7 +27,7 @@ function Yoga({ entries }) {
             <div className="frame">
                 <Canvas />
             </div>
-            <div>
+            <div className="current-position">
                 {entries.length > 0 && (
                     <>
                         <h2>Current Position: {entries[currentIndex].position}</h2>
