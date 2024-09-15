@@ -8,15 +8,15 @@ import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import { ConvexProvider, ConvexReactClient, Authenticated, Unauthenticated, useQuery, useMutation } from "convex/react";
 import { ClerkProvider, useAuth, SignIn, UserButton } from "@clerk/clerk-react";
 import { ConvexProviderWithClerk } from "convex/react-clerk";
+import { ConvexReactClient, useQuery } from "convex/react";
+import { ClerkProvider, useAuth} from "@clerk/clerk-react";
 
-import { api } from "./convex/_generated/api.js";
+
+import { ConvexProviderWithClerk } from "convex/react-clerk";
 
 const convex = new ConvexReactClient("https://greedy-warbler-756.convex.cloud");
 
-function Temp(){
-  const updateUser = useMutation(api.users.updateUser, {});
-  updateUser(); //Just going to update the user all the time
-}
+
 
 function App() {
   return (
@@ -45,6 +45,26 @@ function App() {
           </ConvexProviderWithClerk>
         </ClerkProvider>
       </ConvexProvider>
+=======
+    
+      <ClerkProvider publishableKey="pk_test_YWN0aXZlLXJvdWdoeS04MS5jbGVyay5hY2NvdW50cy5kZXYk">
+        <ConvexProviderWithClerk client={convex} useAuth={useAuth}>
+        <Router>
+          <div>
+            {/* <Link to="/routine">Landing page =\ Routine</Link> <br />
+            <Link to="/canvas">Routine =\ Yoga</Link> */}
+          <Link to="/routine">Go to routine</Link>
+            <Routes>
+              <Route path="/" element = {<Home />} />
+              <Route path="/routine" element={<Routine />} />
+              <Route path="/canvas" element={<Yoga />} /> {/* Change the name of the Home component to Canvas */}
+            </Routes>
+          </div>
+        </Router>
+        </ConvexProviderWithClerk>
+      </ClerkProvider>
+  
+>>>>>>> Stashed changes
     </div>
   );
 }
