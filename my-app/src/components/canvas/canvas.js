@@ -13,9 +13,6 @@ function Canvas() {
   const [landmarks, setLandmarks] = useState([]);
 
   const updatePose = (landmarks) => {
-    if (landmarks == []) {
-      return;
-    }
     fetch("http://localhost:5000/verifyPose/" + JSON.stringify(landmarks))
       .then((response) => response.text())
       .then((data) => {
@@ -25,7 +22,7 @@ function Canvas() {
 
   useEffect(() => {
     const updatePoseInterval = setInterval(() => {
-      if (landmarks != []) {
+      if (landmarks != [] && landmarks.length > 0) {
         updatePose(landmarks);
       }
     }, 5000);

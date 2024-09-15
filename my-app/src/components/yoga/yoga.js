@@ -11,29 +11,40 @@ function Yoga({ entries }) {
   );
 
   useEffect(() => {
-    if (entries.length > 0 && countdown > 0) {
-      const timer = setInterval(() => {
-        setCountdown((prevCountdown) => prevCountdown - 1);
-        fetch(
-          "http://localhost:5000/setPoseIndex/" +
-            JSON.stringify(entries[currentIndex].position)
-        )
-          .then((response) => response.text())
-          .then((data) => {
-            console.log("user pose has been set: ", data);
-          })
-          .catch((error) => {
-            console.error("Error sending data to backend:", error);
-          });
-      }, 1000);
+    const timer = setInterval(() => {
+      setCountdown((prevCountdown) => prevCountdown - 1);
+      if (countdown === 0 && currentIndex < entries.length - 1) {
+        setCurrentIndex((prevIndex) => prevIndex + 1);
+        setCountdown(entries[currentIndex + 1].time);
+      } else if (countdown === 0 && currentIndex == entries.length - 1) {
+        clearInterval(timer);
+      }
+    }, 1000);
 
-      return () => clearInterval(timer);
-    } else if (countdown === 0 && currentIndex < entries.length - 1) {
-      setCurrentIndex((prevIndex) => prevIndex + 1);
+    return () => {
+      clearInterval(timer);
+    };
+  });
 
-      setCountdown(entries[currentIndex + 1].time);
-    }
-  }, [countdown, currentIndex, entries]);
+  useEffect(() => {
+    const updateGuessedPoseInterval = setInterval(() => {
+      fetch(
+        "http://localhost:5000/setPoseIndex/" +
+          JSON.stringify(entries[currentIndex].position)
+      )
+        .then((response) => response.text())
+        .then((data) => {
+          console.log("user pose has been set: ", data);
+        })
+        .catch((error) => {
+          console.error("Error sending data to backend:", error);
+        });
+    }, 5000);
+
+    return () => {
+      clearInterval(updateGuessedPoseInterval);
+    };
+  });
 
   return (
     <div className="container-fluid">
@@ -56,16 +67,16 @@ function Yoga({ entries }) {
 export default Yoga;
 
 function SidePanel({ entries }) {
-    return (
-      <div className="container-fluid">
-        <Button>Stop Routine</Button>
-        <div>
-          {entries.map((entry, index) => (
-            <div key={index}>
-              {entry.position}: {entry.time} sec
-            </div>
-          ))}
-        </div>
+  return (
+    <div className="container-fluid">
+      <Button>Stop Routine</Button>
+      <div>
+        {entries.map((entry, index) => (
+          <div key={index}>
+            {entry.position}: {entry.time} sec
+          </div>
+        ))}
       </div>
-    );
-  }
+    </div>
+  );
+}
