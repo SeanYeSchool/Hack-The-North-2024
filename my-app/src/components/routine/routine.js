@@ -247,6 +247,7 @@ function Dropdown({ selectedPosition, setSelectedPosition, isModal }) {
         <option value="Plank">Plank</option>
         <option value="Tree">Tree</option>
         <option value="Warrior 2">Warrior 2</option>
+        <option value="Break">Break</option>
       </select>
     </div>
   );
