@@ -23,11 +23,11 @@ function Yoga({ entries }) {
     }, [countdown, currentIndex, entries]);
 
     return (
-        <div className="container">
+        <div className="container-fluid">
             <div className="frame">
                 <Canvas />
             </div>
-            <div className="current-position">
+            <div>
                 {entries.length > 0 && (
                     <>
                         <h2>Current Position: {entries[currentIndex].position}</h2>
@@ -44,7 +44,7 @@ export default Yoga;
 
 function SidePanel({ entries }) {
     return (
-        <div className="container">   
+        <div className="container-fluid">   
             <Button> 
                 Stop Routine
             </Button>
@@ -56,3 +56,23 @@ function SidePanel({ entries }) {
         </div>
     )
 }
+
+
+
+
+// const Yoga = () => {
+//     return (
+//     <>
+//         <div className="container-fluid">
+//                 <div className="frame">
+//                     <Canvas />
+//                 </div>
+//                 <SidePanel />
+                
+//         </div>
+//     </>
+//     );
+// }
+
+
+// export default Yoga;

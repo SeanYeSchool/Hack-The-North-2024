@@ -1,10 +1,9 @@
-.container {
+.container-fluid {
   box-sizing: border-box;
-  position: absolute;
+  position: relative;
   left: 0;
   margin-top: 1%;
   background-color: black;
-  color:  white;
   width: 100%;
   padding: 1%;
   /* outline: solid white; */
@@ -22,15 +21,14 @@
 
 .output_canvas {
   border-radius: 1%;
-  max-width: 85%;
-  height: 100%;
+  max-width: 75%;
+  max-height: 100%;
   /* margin: 2% 1%; */
   display: block;
   position: relative;
   left: 0;
   top: 0;
   align-self: left;
-  outline: solid white;
 }
 
 .frame {
@@ -38,7 +36,6 @@
   align-items: left;
   width: 100%;
   max-height: 100%;
-  outline: solid white;
 }
 
 .App {
