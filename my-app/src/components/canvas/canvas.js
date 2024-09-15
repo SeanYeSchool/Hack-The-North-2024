@@ -13,6 +13,9 @@ function Canvas() {
   const [landmarks, setLandmarks] = useState([]);
 
   const updatePose = (landmarks) => {
+    if (landmarks == []) {
+      return;
+    }
     fetch("http://localhost:5000/setVectors/" + JSON.stringify(landmarks))
       .then((response) => response.text())
       .then((data) => {
@@ -22,7 +25,7 @@ function Canvas() {
 
   useEffect(() => {
     const updatePoseInterval = setInterval(() => {
-      if (landmarks) {
+      if (landmarks != []) {
         updatePose(landmarks);
       }
     }, 5000);
@@ -30,7 +33,7 @@ function Canvas() {
     return () => {
       clearInterval(updatePoseInterval);
     };
-  }, []);
+  });
 
   function onResults(results) {
     const canvasElement = canvasRef.current;

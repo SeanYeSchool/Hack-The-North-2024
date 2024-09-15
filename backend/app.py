@@ -41,9 +41,11 @@ def setVector(vectors_json):
         rows.append([vector['x'], vector['y'], vector['z'], vector['visibility']])   
     rows = pd.DataFrame(rows)
     coords = read_coords(rows)
-    prediction = get_prediction(coords, model)
-    angle_diff = get_angle_diff(prediction, coords)
-    return str(prediction)
+    try:
+        prediction = get_prediction(coords, model)
+        return str(prediction)
+    except:
+        return "-1"
 
 @app.route("/getComment/<string:comment>")
 def getComment(comment):
