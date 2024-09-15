@@ -50,14 +50,6 @@ function Routine({ entries, setEntries }) {
     const positions = entries.map((entry) => entry.position);
 
     // Send data to the backend
-    fetch("http://localhost:5000/setPoseIndex/" + JSON.stringify(positions))
-      .then((response) => response.text())
-      .then((j) => {
-        console.log(j, "Was sent to Flask");
-      })
-      .catch((error) => {
-        console.error("Error sending data to backend:", error);
-      });
   }, [entries]);
 
   const addEntry = () => {
@@ -249,10 +241,11 @@ function Dropdown({ selectedPosition, setSelectedPosition, isModal }) {
         <option value="" disabled={isModal} className="hidden-option">
           Positions
         </option>
-        <option value="Doggy 1">Doggy 1</option>
-        <option value="Doggy 2">Doggy 2</option>
-        <option value="Doggy 3">Doggy 3</option>
-        <option value="Doggy 4">Doggy 4</option>
+        <option value="Downward Dog">Downward Dog</option>
+        <option value="Goddess">Goddess</option>
+        <option value="Plank">Plank</option>
+        <option value="Tree">Tree</option>
+        <option value="Warrior 2">Warrior 2</option>
       </select>
     </div>
   );
