@@ -10,27 +10,6 @@ function Canvas({ setLandmarks }) {
   var camera = null;
   const [didLoad, setdidLoad] = useState(false);
 
-  // const updatePose = (landmarks) => {
-  //   fetch("http://localhost:5000/verifyPose/" + JSON.stringify(landmarks))
-  //     .then((response) => response.text())
-  //     .then((data) => {
-  //       console.log("returned data: ", data);
-  //     });
-  // };
-
-  // useEffect(() => {
-  //   const updatePoseInterval = setInterval(() => {
-  //     if (landmarks != [] && landmarks.length > 0) {
-  //       setLandmarks(landmarks);
-  //       updatePose(landmarks);
-  //     }
-  //   }, 5000);
-
-  //   return () => {
-  //     clearInterval(updatePoseInterval);
-  //   };
-  // });
-
   function onResults(results) {
     const canvasElement = canvasRef.current;
     const canvasCtx = canvasElement.getContext("2d");
@@ -50,14 +29,7 @@ function Canvas({ setLandmarks }) {
         canvasCtx,
         results.poseLandmarks,
         pose.POSE_CONNECTIONS,
-        { visibilityMin: 0.65, color: "white" }
-      );
-      drawingUtils.drawLandmarks(
-        canvasCtx,
-        Object.values(pose.POSE_LANDMARKS_LEFT).map(
-          (index) => results.poseLandmarks[index]
-        ),
-        { visibilityMin: 0.65, color: "white", fillColor: "blue" }
+        { visibilityMin: 0.65, color: "white", lineWidth: 32 }
       );
 
       drawingUtils.drawLandmarks(
@@ -65,7 +37,15 @@ function Canvas({ setLandmarks }) {
         Object.values(pose.POSE_LANDMARKS_RIGHT).map(
           (index) => results.poseLandmarks[index]
         ),
-        { visibilityMin: 0.65, color: "white", fillColor: "red" }
+        { visibilityMin: 0.65, color: "white", fillColor: "red", radius: 20 }
+      );
+
+      drawingUtils.drawLandmarks(
+        canvasCtx,
+        Object.values(pose.POSE_LANDMARKS_LEFT).map(
+          (index) => results.poseLandmarks[index]
+        ),
+        { visibilityMin: 0.65, color: "white", fillColor: "blue", radius: 20 }
       );
 
       drawingUtils.drawLandmarks(
@@ -73,7 +53,7 @@ function Canvas({ setLandmarks }) {
         Object.values(pose.POSE_LANDMARKS_NEUTRAL).map(
           (index) => results.poseLandmarks[index]
         ),
-        { visibilityMin: 0.65, color: "white", fillColor: "white" }
+        { visibilityMin: 0.65, color: "white", fillColor: "purple", radius: 20 }
       );
 
       setLandmarks(results.poseLandmarks);
