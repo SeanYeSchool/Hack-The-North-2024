@@ -12,6 +12,26 @@ function Canvas() {
 
   const [landmarks, setLandmarks] = useState([]);
 
+  const updatePose = (landmarks) => {
+    fetch("http://localhost:5000/setVectors/" + JSON.stringify(landmarks))
+      .then((response) => response.text())
+      .then((data) => {
+        console.log("returned data: ", data);
+      });
+  };
+
+  useEffect(() => {
+    const updatePoseInterval = setInterval(() => {
+      if (landmarks) {
+        updatePose(landmarks);
+      }
+    }, 5000);
+
+    return () => {
+      clearInterval(updatePoseInterval);
+    };
+  }, []);
+
   function onResults(results) {
     const canvasElement = canvasRef.current;
     const canvasCtx = canvasElement.getContext("2d");
@@ -58,14 +78,14 @@ function Canvas() {
       );
 
       setLandmarks(results.poseLandmarks);
-      fetch(
-        "http://localhost:5000/setVectors/" +
-          JSON.stringify(results.poseLandmarks)
-      )
-        .then((response) => response.text())
-        .then((data) => {
-          console.log("returned data: ", data);
-        });
+      // fetch(
+      //   "http://localhost:5000/setVectors/" +
+      //     JSON.stringify(results.poseLandmarks)
+      // )
+      //   .then((response) => response.text())
+      //   .then((data) => {
+      //     console.log("returned data: ", data);
+      //   });
     }
     canvasCtx.restore();
   }
