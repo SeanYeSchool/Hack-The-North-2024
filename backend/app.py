@@ -19,8 +19,11 @@ global currentPose
 model = pose_rec_model(3, 128, 32, 5, 16, 8, 0.2)
 model.load_state_dict(torch.load("test_model_80.pt", weights_only=False)) 
 
+currentPose = None
+
 @app.route("/setPoseIndex/<string:routine_json>", methods=['GET'])
 def setRoutine(routine_json):
+    global currentPose
     routine_list = json.loads(routine_json)
     currentPose = routine_list[0]
 
@@ -31,6 +34,7 @@ def verifyPose(vectors_json):
         [x, y, z, v] list of list of floats
     ]
     '''
+    global currentPose
     vectors_list = json.loads(vectors_json)
     rows = []
     for vector in vectors_list:
@@ -41,7 +45,7 @@ def verifyPose(vectors_json):
         prediction = get_prediction(coords, model)
         return str(prediction==currentPose).lower()
     except:
-        return "-1"
+        return False
 
 @app.route("/getComment/<string:comment>")
 def getComment(comment):
