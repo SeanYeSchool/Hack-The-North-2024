@@ -4,12 +4,13 @@ import Button from "react-bootstrap/Button";
 import Canvas from "../canvas/canvas.js";
 import "../../yoga.css";
 
-function Yoga({ entries, landmarks, setLandmarks }) {
+function Yoga({ entries }) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [countdown, setCountdown] = useState(
     entries.length > 0 ? entries[0].time : 0
   );
   const [poseUpdateCounter, setPoseUpdateCounter] = useState(5); // For pose update interval
+  const [landmarks, setLandmarks] = useState([]);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -34,7 +35,6 @@ function Yoga({ entries, landmarks, setLandmarks }) {
         if (prevCounter === 1) {
           sendPoseUpdate();
           verifyPose(landmarks);
-
           return 5; // Reset counter to send the next pose update in 5 seconds
         } else {
           return prevCounter - 1; // Decrease pose update counter by 1 second
@@ -45,7 +45,7 @@ function Yoga({ entries, landmarks, setLandmarks }) {
     return () => {
       clearInterval(timer);
     };
-  }, [currentIndex, entries]);
+  }, [currentIndex, entries, landmarks]);
 
   const sendPoseUpdate = () => {
     console.log("Sending pose update");
@@ -73,7 +73,7 @@ function Yoga({ entries, landmarks, setLandmarks }) {
   return (
     <div className="container-fluid">
       <div className="frame">
-        <Canvas landmarks={landmarks} setLandmarks={setLandmarks} />
+        <Canvas setLandmarks={setLandmarks} />
       </div>
       <SidePanel
         entries={entries}

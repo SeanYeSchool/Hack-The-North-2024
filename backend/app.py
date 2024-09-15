@@ -12,23 +12,24 @@ import requests
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}})
 
-log = logging.getLogger('werkzeug')
-log.setLevel(logging.ERROR)
+# log = logging.getLogger('werkzeug')
+# log.setLevel(logging.ERROR)
 
 global model
-global currentPose
+global targetPose
 model = pose_rec_model(3, 128, 32, 5, 16, 8, 0.2)
 model.load_state_dict(torch.load("test_model_80.pt", weights_only=False)) 
 
-currentPose = None
+targetPose = None
 
 @app.route("/setPoseIndex/<string:pose_json>", methods=['GET'])
 def setPoseIndex(pose_json):
-    global currentPose
+    print(pose_json)
+    global targetPose
     pose = str(json.loads(pose_json)).lower().replace(' ', '')
+    print(pose)
     try:
-        currentPose = pose_map[pose]
-        print(currentPose, 'currentpose_setPose')
+        targetPose = pose_map[pose]
         return "true"
     except:
         return "false"
@@ -40,17 +41,16 @@ def verifyPose(vectors_json):
         [x, y, z, v] list of list of floats
     ]
     '''
-    global currentPose
     vectors_list = json.loads(vectors_json)
     rows = []
     for vector in vectors_list:
         rows.append([vector['x'], vector['y'], vector['z'], vector['visibility']])   
     rows = pd.DataFrame(rows)
     coords = read_coords(rows)
-    print(currentPose, 'currentpose_verify')
     try:
         prediction = get_prediction(coords, model)
-        return str(prediction==currentPose).lower()
+        print(prediction, targetPose)
+        return str(prediction==targetPose).lower()
     except:
         return "error"
 
