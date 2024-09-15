@@ -62,16 +62,9 @@ function Canvas() {
         "http://localhost:5000/setVectors/" +
           JSON.stringify(results.poseLandmarks)
       )
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error(
-              "Network response was not ok " + response.statusText
-            );
-          }
-          response.text();
-        })
+        .then((response) => response.text())
         .then((data) => {
-          console.log("returned data: ", data.data);
+          console.log("returned data: ", data);
         });
     }
     canvasCtx.restore();
