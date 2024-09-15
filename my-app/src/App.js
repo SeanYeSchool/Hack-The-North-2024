@@ -15,6 +15,7 @@ const convex = new ConvexReactClient("https://greedy-warbler-756.convex.cloud");
 
 function App() {
   const [entries, setEntries] = useState([]);
+  const [landmarks, setLandmarks] = useState([]);
 
   return (
     <div className="App">
@@ -25,7 +26,7 @@ function App() {
               <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/routine" element={<Routine entries={entries} setEntries={setEntries} />} />
-                <Route path="/canvas" element={<Yoga entries={entries} />} />
+                <Route path="/canvas" element={<Yoga entries={entries} landmarks={landmarks} setLandmarks={setLandmarks}/>} />
               </Routes>
               <Navigation />
             </Router>

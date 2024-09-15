@@ -4,52 +4,75 @@ import Button from "react-bootstrap/Button";
 import Canvas from "../canvas/canvas.js";
 import "../../yoga.css";
 
-function Yoga({ entries }) {
+function Yoga({ entries, landmarks, setLandmarks }) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [countdown, setCountdown] = useState(
     entries.length > 0 ? entries[0].time : 0
   );
+  const [poseUpdateCounter, setPoseUpdateCounter] = useState(5); // For pose update interval
 
   useEffect(() => {
     const timer = setInterval(() => {
-      setCountdown((prevCountdown) => prevCountdown - 1);
-      if (countdown === 0 && currentIndex < entries.length - 1) {
-        setCurrentIndex((prevIndex) => prevIndex + 1);
-        setCountdown(entries[currentIndex + 1].time);
-      } else if (countdown === 0 && currentIndex == entries.length - 1) {
-        clearInterval(timer);
-      }
+      setCountdown((prevCountdown) => {
+        if (prevCountdown === 0) {
+          if (currentIndex < entries.length - 1) {
+            // Move to the next position and reset countdown
+            setCurrentIndex((prevIndex) => prevIndex + 1);
+            setPoseUpdateCounter(5); // Reset pose update interval
+            return entries[currentIndex + 1].time; // Set countdown for the next position
+          } else {
+            // Stop the timer if the last position is finished
+            clearInterval(timer);
+            return 0; // Ensure countdown doesn't go negative
+          }
+        } else {
+          return prevCountdown - 1; // Decrease countdown by 1 second
+        }
+      });
+
+      setPoseUpdateCounter((prevCounter) => {
+        if (prevCounter === 1) {
+          updatePose(landmarks);
+          sendPoseUpdate();
+          return 5; // Reset counter to send the next pose update in 5 seconds
+        } else {
+          return prevCounter - 1; // Decrease pose update counter by 1 second
+        }
+      });
     }, 1000);
 
     return () => {
       clearInterval(timer);
     };
-  });
+  }, [currentIndex, entries]);
 
-  useEffect(() => {
-    const updateGuessedPoseInterval = setInterval(() => {
-      fetch(
-        "http://localhost:5000/setPoseIndex/" +
-          JSON.stringify(entries[currentIndex].position)
-      )
-        .then((response) => response.text())
-        .then((data) => {
-          console.log("user pose has been set: ", data);
-        })
-        .catch((error) => {
-          console.error("Error sending data to backend:", error);
-        });
-    }, 5000);
+  const sendPoseUpdate = () => {
+    console.log("Sending pose update");
+    fetch(
+      "http://localhost:5000/setPoseIndex/" +
+        JSON.stringify(entries[currentIndex].position)
+    )
+      .then((response) => response.text())
+      .then((data) => {
+        console.log("User pose has been set: ", data);
+      })
+      .catch((error) => {
+        console.error("Error sending data to backend:", error);
+      });
+  };
 
-    return () => {
-      clearInterval(updateGuessedPoseInterval);
-    };
-  });
+  const updatePose = (landmarks) => {
+    fetch("http://localhost:5000/verifyPose/" + JSON.stringify(landmarks))
+      .then((response) => response.text())
+      .then((data) => {
+        console.log("returned data: ", data);
+      });
+  };
 
   return (
     <div className="container-fluid">
       <div className="frame">
-        <Canvas />
+        <Canvas landmarks={landmarks} setLandmarks={setLandmarks} />
       </div>
       <SidePanel
         entries={entries}

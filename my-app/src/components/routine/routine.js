@@ -32,7 +32,7 @@ const toggleBodyScroll = (lock) => {
   document.body.style.overflowX = "hidden"; // Always lock x-scroll
 };
 
-function Routine({ entries, setEntries }) {
+function Routine({ entries, setEntries, landmarks, setLandmarks}) {
   const [selectedPosition, setSelectedPosition] = useState("");
   const [time, setTime] = useState("5");
   const [isModalOpen, setIsModalOpen] = useState(false);
