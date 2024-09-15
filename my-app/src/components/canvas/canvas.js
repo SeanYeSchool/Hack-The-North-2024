@@ -16,7 +16,7 @@ function Canvas() {
     if (landmarks == []) {
       return;
     }
-    fetch("http://localhost:5000/setVectors/" + JSON.stringify(landmarks))
+    fetch("http://localhost:5000/verifyPose/" + JSON.stringify(landmarks))
       .then((response) => response.text())
       .then((data) => {
         console.log("returned data: ", data);
@@ -81,14 +81,6 @@ function Canvas() {
       );
 
       setLandmarks(results.poseLandmarks);
-      // fetch(
-      //   "http://localhost:5000/setVectors/" +
-      //     JSON.stringify(results.poseLandmarks)
-      // )
-      //   .then((response) => response.text())
-      //   .then((data) => {
-      //     console.log("returned data: ", data);
-      //   });
     }
     canvasCtx.restore();
   }
