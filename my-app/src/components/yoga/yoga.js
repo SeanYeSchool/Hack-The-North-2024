@@ -56,32 +56,16 @@ function Yoga({ entries }) {
 export default Yoga;
 
 function SidePanel({ entries }) {
-  return (
-    <div className="container-fluid">
-      <Button>Stop Routine</Button>
-      <div>
-        {entries.map((entry, index) => (
-          <div key={index}>
-            {entry.position}: {entry.time} sec
-          </div>
-        ))}
+    return (
+      <div className="container-fluid">
+        <Button>Stop Routine</Button>
+        <div>
+          {entries.map((entry, index) => (
+            <div key={index}>
+              {entry.position}: {entry.time} sec
+            </div>
+          ))}
+        </div>
       </div>
-    </div>
-  );
-}
-
-// const Yoga = () => {
-//     return (
-//     <>
-//         <div className="container-fluid">
-//                 <div className="frame">
-//                     <Canvas />
-//                 </div>
-//                 <SidePanel />
-
-//         </div>
-//     </>
-//     );
-// }
-
-// export default Yoga;
+    );
+  }
