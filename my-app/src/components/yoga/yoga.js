@@ -4,79 +4,119 @@ import Button from "react-bootstrap/Button";
 import Canvas from "../canvas/canvas.js";
 import "../../yoga.css";
 
-function Yoga({ entries }) {
+function Yoga({ entries, landmarks, setLandmarks }) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [countdown, setCountdown] = useState(
     entries.length > 0 ? entries[0].time : 0
   );
+  const [poseUpdateCounter, setPoseUpdateCounter] = useState(5); // For pose update interval
 
   useEffect(() => {
-    if (entries.length > 0 && countdown > 0) {
-      const timer = setInterval(() => {
-        setCountdown((prevCountdown) => prevCountdown - 1);
-        fetch(
-          "http://localhost:5000/setPoseIndex/" +
-            JSON.stringify(entries[currentIndex].position)
-        )
-          .then((response) => response.text())
-          .then((data) => {
-            console.log("user pose has been set: ", data);
-          })
-          .catch((error) => {
-            console.error("Error sending data to backend:", error);
-          });
-      }, 1000);
+    const timer = setInterval(() => {
+      setCountdown((prevCountdown) => {
+        if (prevCountdown === 0) {
+          if (currentIndex < entries.length - 1) {
+            // Move to the next position and reset countdown
+            setCurrentIndex((prevIndex) => prevIndex + 1);
+            setPoseUpdateCounter(5); // Reset pose update interval
+            return entries[currentIndex + 1].time; // Set countdown for the next position
+          } else {
+            // Stop the timer if the last position is finished
+            clearInterval(timer);
+            return 0; // Ensure countdown doesn't go negative
+          }
+        } else {
+          return prevCountdown - 1; // Decrease countdown by 1 second
+        }
+      });
 
-      return () => clearInterval(timer);
-    } else if (countdown === 0 && currentIndex < entries.length - 1) {
-      setCurrentIndex((prevIndex) => prevIndex + 1);
+      setPoseUpdateCounter((prevCounter) => {
+        if (prevCounter === 1) {
+          updatePose(landmarks);
+          sendPoseUpdate();
+          return 5; // Reset counter to send the next pose update in 5 seconds
+        } else {
+          return prevCounter - 1; // Decrease pose update counter by 1 second
+        }
+      });
+    }, 1000);
 
-      setCountdown(entries[currentIndex + 1].time);
-    }
-  }, [countdown, currentIndex, entries]);
+    return () => {
+      clearInterval(timer);
+    };
+  }, [currentIndex, entries]);
+
+  const sendPoseUpdate = () => {
+    console.log("Sending pose update");
+    fetch(
+      "http://localhost:5000/setPoseIndex/" +
+        JSON.stringify(entries[currentIndex].position)
+    )
+      .then((response) => response.text())
+      .then((data) => {
+        console.log("User pose has been set: ", data);
+      })
+      .catch((error) => {
+        console.error("Error sending data to backend:", error);
+      });
+  };
+
+  const updatePose = (landmarks) => {
+    fetch("http://localhost:5000/verifyPose/" + JSON.stringify(landmarks))
+      .then((response) => response.text())
+      .then((data) => {
+        console.log("returned data: ", data);
+      });
+  };
 
   return (
     <div className="container-fluid">
       <div className="frame">
-        <Canvas />
+        <Canvas landmarks={landmarks} setLandmarks={setLandmarks} />
       </div>
-      <SidePanel entries={entries} countdown={countdown} currentIndex={currentIndex}/>
-      <NextPose entries={entries}/>
+      <SidePanel
+        entries={entries}
+        countdown={countdown}
+        currentIndex={currentIndex}
+      />
+      <NextPose entries={entries} />
     </div>
   );
 }
 
 export default Yoga;
 
-function SidePanel({ entries, currentIndex, countdown}) {
-    return (
-      <div className="side-panel">
-         <div className="info-panel">
+function SidePanel({ entries, currentIndex, countdown }) {
+  return (
+    <div className="side-panel">
+      <div className="info-panel">
         {entries.length > 0 && (
           <>
-            <h2 className="position-text">Current Position: {entries[currentIndex].position}</h2>
+            <h2 className="position-text">
+              Current Position: {entries[currentIndex].position}
+            </h2>
             <h3 className="countdown-text">Time Remaining: {countdown} sec</h3>
           </>
         )}
-        </div>
-        <Button className="side-panel-button" variant="danger">
-          Stop Routine
-        </Button>
       </div>
-    );
-  }
+      <Button className="side-panel-button" variant="danger">
+        Stop Routine
+      </Button>
+    </div>
+  );
+}
 
-function NextPose({entries}){
-    return (
-      <div className="next-pose">
-        <h2 className="next-pose-title">Pose Queue</h2>
-        <ul className="pose-panel-list">
-          {entries.map((entry, index) => (
-            <li key={index} className="pose-panel-item">
-              {entry.position}: {entry.time} sec
-            </li>
-          ))}
-        </ul>
-      </div>
-    );
-  }
+function NextPose({ entries }) {
+  return (
+    <div className="next-pose">
+      <h2 className="next-pose-title">Pose Queue</h2>
+      <ul className="pose-panel-list">
+        {entries.map((entry, index) => (
+          <li key={index} className="pose-panel-item">
+            {entry.position}: {entry.time} sec
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}

@@ -4,18 +4,13 @@ import * as cam from "@mediapipe/camera_utils";
 import * as drawingUtils from "@mediapipe/drawing_utils";
 import { useRef, useEffect, useState } from "react";
 
-function Canvas() {
+function Canvas({landmarks, setLandmarks}) {
   const webcamRef = useRef(null);
   const canvasRef = useRef(null);
   var camera = null;
   const [didLoad, setdidLoad] = useState(false);
 
-  const [landmarks, setLandmarks] = useState([]);
-
   const updatePose = (landmarks) => {
-    if (landmarks == []) {
-      return;
-    }
     fetch("http://localhost:5000/verifyPose/" + JSON.stringify(landmarks))
       .then((response) => response.text())
       .then((data) => {
@@ -25,7 +20,8 @@ function Canvas() {
 
   useEffect(() => {
     const updatePoseInterval = setInterval(() => {
-      if (landmarks != []) {
+      if (landmarks != [] && landmarks.length > 0) {
+        setLandmarks(landmarks);
         updatePose(landmarks);
       }
     }, 5000);
