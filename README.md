@@ -1,3 +1,5 @@
+# Yoga Yogi
+
 ## Inspiration
 
 Just Dance was probably my favorite game as a kid. Not only because I got to listen to Psy a million times a day, but because I loved to run and hop and dance around. At this hackathon, it was an inspiration for us to try and build something similar for everyone: a pose guiding app that helped people get active. 
