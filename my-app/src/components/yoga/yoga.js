@@ -14,23 +14,23 @@ function Yoga({ entries }) {
     if (entries.length > 0 && countdown > 0) {
       const timer = setInterval(() => {
         setCountdown((prevCountdown) => prevCountdown - 1);
+        fetch(
+          "http://localhost:5000/setPoseIndex/" +
+            JSON.stringify(entries[currentIndex].position)
+        )
+          .then((response) => response.text())
+          .then((data) => {
+            console.log("user pose has been set: ", data);
+          })
+          .catch((error) => {
+            console.error("Error sending data to backend:", error);
+          });
       }, 1000);
 
       return () => clearInterval(timer);
     } else if (countdown === 0 && currentIndex < entries.length - 1) {
-      // Move to the next entry
       setCurrentIndex((prevIndex) => prevIndex + 1);
-      fetch(
-        "http://localhost:5000/setPoseIndex/" +
-          JSON.stringify(entries[currentIndex])
-      )
-        .then((response) => response.text())
-        .then((data) => {
-          console.log("output: ", data);
-        })
-        .catch((error) => {
-          console.error("Error sending data to backend:", error);
-        });
+
       setCountdown(entries[currentIndex + 1].time);
     }
   }, [countdown, currentIndex, entries]);

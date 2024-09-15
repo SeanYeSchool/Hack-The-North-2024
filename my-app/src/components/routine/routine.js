@@ -102,10 +102,10 @@ function Routine({ entries, setEntries }) {
     closeEditModal();
   };
 
-    return (
-        <DndProvider backend={HTML5Backend}>
-            <div className="main">
-                <h1>Create Your Routine</h1>
+  return (
+    <DndProvider backend={HTML5Backend}>
+      <div className="main">
+        <h1>Create Your Routine</h1>
 
         <div className="table">
           <table>
