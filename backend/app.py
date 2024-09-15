@@ -70,9 +70,9 @@ def getComment(angle_margin_of_error, vectors_json):
 
     Warrior2: Hands are not straightly spread out
     '''
-    global currentPose
-    if currentPose == None:
-        return "currentPose is None"
+    global targetPose
+    if targetPose == None:
+        return "targetPose is None"
     
     #currentPose = 0 #For debugging purposes
     vectors_list = json.loads(vectors_json) #Do math with this to varify test cases
@@ -82,7 +82,7 @@ def getComment(angle_margin_of_error, vectors_json):
     rows = pd.DataFrame(rows)
     coords = read_coords(rows)
 
-    angle_diff = get_angle_diff(currentPose, coords) #We assume the current pos is the predicted one
+    angle_diff = get_angle_diff(targetPose, coords) #We assume the current pos is the predicted one
     target_bodypart = None
     for bodypart in angle_diff:
         if angle_diff[bodypart] > angle_margin_of_error:
@@ -108,7 +108,7 @@ def getComment(angle_margin_of_error, vectors_json):
         response_json = interact({'type' : 'text', 'payload' : 'Say an encouraging message relating to great work'})
     else:
         message = "A person is doing the "
-        message += tuple(pose_map.keys())[currentPose]
+        message += tuple(pose_map.keys())[targetPose]
         message += " but their " 
         message += target_bodypart
         message += " is at an incorrect angle. What feedback can you give for the person to improve?"

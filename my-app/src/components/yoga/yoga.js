@@ -4,6 +4,7 @@ import Button from "react-bootstrap/Button";
 import Canvas from "../canvas/canvas.js";
 import "../../yoga.css";
 import { useNavigate } from "react-router-dom"; // Import useNavigate
+import TextToSpeech from './tts.js';
 
 function Yoga({ entries }) {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -144,9 +145,11 @@ function FeedbackMessage({ entries, messages, currentIndex }) {
       <h2 className="next-pose-title">Feedback</h2>
       <ul className="pose-panel-list">
         {messages.map((msg, index) => (
+          <>
           <li key={index} className="pose-panel-item">
-            {msg}
-          </li>
+            {msg.substring(3)}
+          </li><TextToSpeech text={msg.substring(3)} />
+          </>
         ))}
         <div ref={messagesEndRef} />
       </ul>
