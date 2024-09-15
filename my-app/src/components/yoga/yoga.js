@@ -1,9 +1,9 @@
 import "bootstrap/dist/css/bootstrap.min.css";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Button from "react-bootstrap/Button";
 import Canvas from "../canvas/canvas.js";
 import "../../yoga.css";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom"; // Import useNavigate
 
 function Yoga({ entries }) {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -13,7 +13,9 @@ function Yoga({ entries }) {
   const [poseUpdateCounter, setPoseUpdateCounter] = useState(5); // For pose update interval
   const [messages, setMessage] = useState([]);
   const [landmarks, setLandmarks] = useState([]);
- 
+  
+  const navigate = useNavigate(); // Initialize useNavigate
+
   useEffect(() => {
     const timer = setInterval(() => {
       setCountdown((prevCountdown) => {
@@ -48,7 +50,7 @@ function Yoga({ entries }) {
     return () => {
       clearInterval(timer);
     };
-  }, [currentIndex, entries, landmarks]);
+  }, [currentIndex, entries, landmarks, navigate]);
 
   const getFeedbackMessage = (landmarks) => {
     console.log("Sending pose update");
@@ -120,23 +122,33 @@ function SidePanel({ entries, currentIndex, countdown }) {
           </>
         )}
       </div>
-      <Button className="side-panel-button" variant="danger">
-        <a href="/">Stop Routine and Return Home</a>
-      </Button>
+    <a href="/">
+        <Button className="side-panel-button" variant="danger">{countdown === 0 && currentIndex >= entries.length - 1 ? 'Return Home' : 'Stop Routine and Return Home'}</Button>
+    </a>
     </div>
   );
 }
 
 function FeedbackMessage({ entries, messages, currentIndex }) {
+    const messagesEndRef = useRef(null);
+
+  // Scroll to the bottom when messages change
+  useEffect(() => {
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [messages]);
+
   return (
     <div className="next-pose">
-      <h2 className="next-pose-title">Pose Queue</h2>
+      <h2 className="next-pose-title">Feedback</h2>
       <ul className="pose-panel-list">
         {messages.map((msg, index) => (
           <li key={index} className="pose-panel-item">
-            {msg}
+            {msg.substring(3)}
           </li>
         ))}
+        <div ref={messagesEndRef} />
       </ul>
     </div>
   );
