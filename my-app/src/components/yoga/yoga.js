@@ -32,8 +32,9 @@ function Yoga({ entries, landmarks, setLandmarks }) {
 
       setPoseUpdateCounter((prevCounter) => {
         if (prevCounter === 1) {
-          updatePose(landmarks);
           sendPoseUpdate();
+          verifyPose(landmarks);
+
           return 5; // Reset counter to send the next pose update in 5 seconds
         } else {
           return prevCounter - 1; // Decrease pose update counter by 1 second
@@ -61,11 +62,11 @@ function Yoga({ entries, landmarks, setLandmarks }) {
       });
   };
 
-  const updatePose = (landmarks) => {
+  const verifyPose = (landmarks) => {
     fetch("http://localhost:5000/verifyPose/" + JSON.stringify(landmarks))
       .then((response) => response.text())
       .then((data) => {
-        console.log("returned data: ", data);
+        console.log("pose verified as: ", data);
       });
   };
 

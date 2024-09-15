@@ -27,6 +27,7 @@ def setPoseIndex(pose_json):
     pose = str(json.loads(pose_json)).lower().replace(' ', '')
     try:
         currentPose = pose_map[pose]
+        print(currentPose, 'currentpose_setPose')
         return "true"
     except:
         return "false"
@@ -45,11 +46,12 @@ def verifyPose(vectors_json):
         rows.append([vector['x'], vector['y'], vector['z'], vector['visibility']])   
     rows = pd.DataFrame(rows)
     coords = read_coords(rows)
+    print(currentPose, 'currentpose_verify')
     try:
         prediction = get_prediction(coords, model)
         return str(prediction==currentPose).lower()
     except:
-        return "false"
+        return "error"
 
 @app.route("/getComment/<string:comment>")
 def getComment(comment):
