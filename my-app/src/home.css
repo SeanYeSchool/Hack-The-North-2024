@@ -1,0 +1,70 @@
+/* Apply a light sky blue background color */
+body {
+    background-color: #f0f8ff;
+    font-family: 'Arial', sans-serif; /* Modern, clean font */
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    overflow: hidden;
+  }
+  
+  /* Style the main container */
+  .container {
+    max-width: 800px;
+    padding: 20px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Header style */
+  h1 {
+    text-align: center;
+    color: #333;
+    font-weight: 700;
+    margin: 40px 0 20px 0; /* Added top margin to create space from the top */
+  }
+  
+  /* Image style */
+  img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 0 auto 40px auto; /* Increased bottom margin for more spacing */
+    border-radius: 10px; /* Rounded corners for the image */
+  }
+  
+  /* Center the content horizontally */
+  .stack-horizontal {
+    justify-content: center;
+    align-items: center;
+    gap: 50px; /* Increased gap to separate image and login further */
+  }
+  
+  /* SignIn button style */
+  .clerk-sign-in {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+  }
+  
+  /* UserButton styling */
+  .user-button {
+    display: flex;
+    justify-content: flex-end;
+    padding: 10px;
+  }
+  
+  /* Unauthenticated section */
+  .unauthenticated {
+    padding: 20px;
+  }
+  
+  /* Authenticated section */
+  .authenticated {
+    padding: 20px;
+  }
+  
