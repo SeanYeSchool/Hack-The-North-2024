@@ -3,7 +3,8 @@ import React, { useState, useEffect } from "react";
 import Button from "react-bootstrap/Button";
 import Canvas from "../canvas/canvas.js";
 import "../../yoga.css";
-import { Link } from "react-router-dom";
+import TextToSpeech from './tts.js';
+
 
 function Yoga({ entries }) {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -133,9 +134,11 @@ function FeedbackMessage({ entries, messages, currentIndex }) {
       <h2 className="next-pose-title">Pose Queue</h2>
       <ul className="pose-panel-list">
         {messages.map((msg, index) => (
-          <li key={index} className="pose-panel-item">
-            {msg}
-          </li>
+          <>
+            <li key={index} className="pose-panel-item">
+              {msg}
+            </li><TextToSpeech text={msg} />
+          </>
         ))}
       </ul>
     </div>
