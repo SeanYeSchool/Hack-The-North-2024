@@ -15,21 +15,17 @@ log = logging.getLogger('werkzeug')
 log.setLevel(logging.ERROR)
 
 global model
+global currentPose
 model = pose_rec_model(3, 128, 32, 5, 16, 8, 0.2)
 model.load_state_dict(torch.load("test_model_80.pt", weights_only=False)) 
-routineIds = None
 
-@app.route("/setRoutine/<string:routine_json>", methods=['GET'])
+@app.route("/setPoseIndex/<string:routine_json>", methods=['GET'])
 def setRoutine(routine_json):
-    global routineIds
     routine_list = json.loads(routine_json)
-    routineIds = []
-    for routine in routine_list:
-        routineIds.append(pose_map[routine])
-    return True
+    currentPose = routine_list[0]
 
-@app.route("/setVectors/<string:vectors_json>", methods=['GET'])
-def setVector(vectors_json):
+@app.route("/verifyPose/<string:vectors_json>", methods=['GET'])
+def verifyPose(vectors_json):
     '''
     [
         [x, y, z, v] list of list of floats
@@ -43,7 +39,7 @@ def setVector(vectors_json):
     coords = read_coords(rows)
     try:
         prediction = get_prediction(coords, model)
-        return str(prediction)
+        return str(prediction==currentPose).lower()
     except:
         return "-1"
 
