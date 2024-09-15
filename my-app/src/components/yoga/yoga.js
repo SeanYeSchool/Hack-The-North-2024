@@ -166,7 +166,7 @@ function FeedbackMessage({ entries, messages, currentIndex }) {
       <ul className="pose-panel-list">
         {messages.map((msg, index) => (
           <li key={index} className="pose-panel-item">
-            {msg}
+            {msg.substring(3)}
           </li>
         ))}
         <div ref={messagesEndRef} />
