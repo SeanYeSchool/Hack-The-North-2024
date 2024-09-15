@@ -142,6 +142,7 @@
   overflow-y: auto; /* Allow scrolling if content overflows */
   z-index: 1000; /* Ensure it stays on top of other content */
   background-color: #ffffff; /* Ensure background is white */
+  color: #333;
 }
 
 .next-pose-title {
