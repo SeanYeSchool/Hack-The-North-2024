@@ -10,6 +10,18 @@ body {
     height: 100vh;
     overflow: hidden;
   }
+
+  @font-face {
+    font-family: 'saman-font';
+    src: url('./assets/SAMAN___.TTF');
+    font-weight: normal;
+    font-style: normal;
+  }  
+
+  .saman-font {
+    font-family: 'saman-font';
+    font-size: 4.5rem;
+  }
   
   /* Style the main container */
   .container {

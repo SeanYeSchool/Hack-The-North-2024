@@ -1,4 +1,7 @@
 .container-fluid {
+  position: fixed;
+  top: 0;
+  font-family: "karla-font";
   box-sizing: border-box;
   background-color: #f8f9fa; /* White background */
   padding: 2%;
@@ -39,10 +42,13 @@
 }
 
 .App {
+  position: fixed;
+  top: 5%;
+  left: 0%;
   background-color: #f0f8ff; /* Light sky blue background */
-  align-items: left;
+  font-family: "karla-font";
   width: 100%;
-  height: 100vh;
+  height: 50%;
   border: none;
 }
 

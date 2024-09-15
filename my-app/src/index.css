@@ -1,5 +1,5 @@
 body {
-  font-family: "Titillium Web", sans-serif;
+  font-family: "karla-font";
   background-color: black;
   margin: 0;
   position: absolute;
@@ -9,3 +9,10 @@ body {
   box-sizing: border-box;
   color: white
 }
+
+@font-face {
+  font-family: 'karla-font';
+  src: url('./assets/Karla-Regular.ttf');
+  font-weight: normal;
+  font-style: normal;
+}  
