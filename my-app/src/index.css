@@ -1,0 +1,18 @@
+body {
+  font-family: "karla-font";
+  background-color: black;
+  margin: 0;
+  position: absolute;
+  transform-origin: 0px 0px;
+  overflow-x: hidden;
+  width: 100%;
+  box-sizing: border-box;
+  color: white
+}
+
+@font-face {
+  font-family: 'karla-font';
+  src: url('./assets/Karla-Regular.ttf');
+  font-weight: normal;
+  font-style: normal;
+}  

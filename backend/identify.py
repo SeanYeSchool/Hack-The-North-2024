@@ -1,8 +1,7 @@
 import numpy as np
 import torch
-from model import pose_rec_model
 from dataset import create_edge_index
-from variables import pose_map, keypoint_end, keypoint_start, bodypart_angle_dict
+from variables import keypoint_end, keypoint_start, bodypart_angle_dict
 import pandas as pd
 from calculate_avg_angle import calculate_angle_from_nodes_3d
 
@@ -10,12 +9,12 @@ index = ['left_elbow', 'right_elbow', 'left_knee', 'right_knee', 'left_hip', 'ri
          'left_shoulder', 'right_shoulder', 'torso', 'left_neck', 'right_neck']
 
 def read_coords(coords_df):
-    for val in coords_df.iloc[-1]:
-        if val < 0.5:
-            raise NotImplementedError
+    # for val in coords_df.iloc[-1]:
+        # if val < 0.5:
+        #     return
         
     coords_df = coords_df.iloc[:, :-1]
-    coords_df.drop(coords_df.tail(1).index,inplace=True)
+    coords_df.drop(coords_df.tail(2).index,inplace=True)
     return coords_df
 
 def get_prediction(coords, model):
