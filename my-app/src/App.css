@@ -164,6 +164,7 @@
   border-bottom: 1px solid #ddd; /* Add a border below each item */
   font-size: 16px; /* Set font size */
   transition: box-shadow 0.3s ease; /* Smooth transition for the shadow effect */
+  color: rgb(38, 38, 38);
 }
 
 .pose-panel-item:last-child {
