@@ -9,12 +9,12 @@ index = ['left_elbow', 'right_elbow', 'left_knee', 'right_knee', 'left_hip', 'ri
          'left_shoulder', 'right_shoulder', 'torso', 'left_neck', 'right_neck']
 
 def read_coords(coords_df):
-    for val in coords_df.iloc[-1]:
-        if val < 0.5:
-            raise NotImplementedError
+    # for val in coords_df.iloc[-1]:
+        # if val < 0.5:
+        #     return
         
     coords_df = coords_df.iloc[:, :-1]
-    coords_df.drop(coords_df.tail(1).index,inplace=True)
+    coords_df.drop(coords_df.tail(2).index,inplace=True)
     return coords_df
 
 def get_prediction(coords, model):
@@ -24,6 +24,7 @@ def get_prediction(coords, model):
     with torch.no_grad():
         out = model(x, create_edge_index(keypoint_start, keypoint_end), torch.tensor([0]))
         predictions = out.argmax(dim=1).item()
+    print(predictions)
     return (predictions) 
 
 def get_angle_diff(prediction, coords):

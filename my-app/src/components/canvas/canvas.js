@@ -68,10 +68,10 @@ function Canvas() {
               "Network response was not ok " + response.statusText
             );
           }
-          response.json();
+          response.text();
         })
         .then((data) => {
-          console.log("returned data: ", data);
+          console.log("returned data: ", data.data);
         });
     }
     canvasCtx.restore();

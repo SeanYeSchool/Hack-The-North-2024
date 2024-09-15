@@ -6,9 +6,13 @@ from identify import get_angle_diff, get_prediction, read_coords
 from model import pose_rec_model
 import torch
 from variables import pose_map
+import logging
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}})
+
+log = logging.getLogger('werkzeug')
+log.setLevel(logging.ERROR)
 
 global model
 model = pose_rec_model(3, 128, 32, 5, 16, 8, 0.2)
@@ -35,11 +39,11 @@ def setVector(vectors_json):
     rows = []
     for vector in vectors_list:
         rows.append([vector['x'], vector['y'], vector['z'], vector['visibility']])   
-    df = pd.concat(rows)
-    coords = read_coords(df)
+    rows = pd.DataFrame(rows)
+    coords = read_coords(rows)
     prediction = get_prediction(coords, model)
     angle_diff = get_angle_diff(prediction, coords)
-    return prediction, angle_diff
+    return str(prediction)
 
 @app.route("/getComment/<string:comment>")
 def getComment(comment):
