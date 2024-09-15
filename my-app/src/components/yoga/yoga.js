@@ -56,23 +56,3 @@ function SidePanel({ entries }) {
         </div>
     )
 }
-
-
-
-
-// const Yoga = () => {
-//     return (
-//     <>
-//         <div className="container-fluid">
-//                 <div className="frame">
-//                     <Canvas />
-//                 </div>
-//                 <SidePanel />
-                
-//         </div>
-//     </>
-//     );
-// }
-
-
-// export default Yoga;
