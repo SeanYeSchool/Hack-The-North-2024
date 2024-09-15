@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import Button from "react-bootstrap/Button";
 import Canvas from "../canvas/canvas.js";
 import "../../yoga.css";
+import { Link } from "react-router-dom";
 
 function Yoga({ entries }) {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -10,8 +11,9 @@ function Yoga({ entries }) {
     entries.length > 0 ? entries[0].time : 0
   );
   const [poseUpdateCounter, setPoseUpdateCounter] = useState(5); // For pose update interval
+  const [messages, setMessage] = useState([]);
   const [landmarks, setLandmarks] = useState([]);
-
+ 
   useEffect(() => {
     const timer = setInterval(() => {
       setCountdown((prevCountdown) => {
@@ -34,6 +36,7 @@ function Yoga({ entries }) {
       setPoseUpdateCounter((prevCounter) => {
         if (prevCounter === 1) {
           sendPoseUpdate();
+          getFeedbackMessage(landmarks);
           verifyPose(landmarks);
           return 5; // Reset counter to send the next pose update in 5 seconds
         } else {
@@ -46,6 +49,22 @@ function Yoga({ entries }) {
       clearInterval(timer);
     };
   }, [currentIndex, entries, landmarks]);
+
+  const getFeedbackMessage = (landmarks) => {
+    console.log("Sending pose update");
+    fetch(
+      "http://localhost:5000/getComment/10.0/" +
+        JSON.stringify(landmarks)
+    )
+      .then((response) => response.text())
+      .then((data) => {
+        setMessage(prevItems => [...prevItems, data]);
+        console.log("Feedback message: ", data);
+      })
+      .catch((error) => {
+        console.error("Feedback message error:", error);
+      });
+  };
 
   const sendPoseUpdate = () => {
     console.log("Sending pose update");
@@ -80,7 +99,7 @@ function Yoga({ entries }) {
         countdown={countdown}
         currentIndex={currentIndex}
       />
-      <NextPose entries={entries} />
+      <FeedbackMessage entries={entries} messages={messages} currentIndex={currentIndex}/>
     </div>
   );
 }
@@ -96,25 +115,26 @@ function SidePanel({ entries, currentIndex, countdown }) {
             <h2 className="position-text">
               Current Position: {entries[currentIndex].position}
             </h2>
+            <div> {currentIndex < entries.length - 1 && 'Next Position: ' + entries[currentIndex+1].position}</div>
             <h3 className="countdown-text">Time Remaining: {countdown} sec</h3>
           </>
         )}
       </div>
       <Button className="side-panel-button" variant="danger">
-        Stop Routine
+        <a href="/">Stop Routine and Return Home</a>
       </Button>
     </div>
   );
 }
 
-function NextPose({ entries }) {
+function FeedbackMessage({ entries, messages, currentIndex }) {
   return (
     <div className="next-pose">
       <h2 className="next-pose-title">Pose Queue</h2>
       <ul className="pose-panel-list">
-        {entries.map((entry, index) => (
+        {messages.map((msg, index) => (
           <li key={index} className="pose-panel-item">
-            {entry.position}: {entry.time} sec
+            {msg}
           </li>
         ))}
       </ul>

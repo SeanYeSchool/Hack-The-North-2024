@@ -23,25 +23,22 @@ function Home() {
     <div>
       <h1 className="saman-font">Yoga Yogi</h1>
       <Unauthenticated>
-        <Container>
-          <Row>
-            <Stack direction="horizontal">
-              <Col>
-                <img src={image} rounded />
-              </Col>
-              <Col>
-                <SignIn/>
-              </Col>
-            </Stack>
-          </Row>
-        </Container>
+        <div className="unauthenticated">
+          <div className="image-container">
+            <img src={image} alt="yoga yogi" className="unauthenticated-image" />
+          </div>
+          <div className="login-container">
+            <SignIn />
+          </div>
+        </div>
       </Unauthenticated>
       <Authenticated>
-        <UserButton/>
-        <Temp/>
+        <UserButton />
+        <Temp />
       </Authenticated>
     </div>
   );
 }
+
 
 export default Home;

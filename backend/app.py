@@ -115,7 +115,7 @@ def getComment(angle_margin_of_error, vectors_json):
         response_json = interact({'type' : 'text', 'payload' : message})
     
     if response_json:
-        return f"GET{response_json[1]["payload"]["message"]}"
+        return f"GET{response_json[1]['payload']['message']}"
     else:
         return "Keep it up!"
 

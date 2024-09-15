@@ -2,3 +2,63 @@
 .container-fluid{
     color: white;
 }
+
+.side-panel {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .info-panel {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    width: 100%;
+  }
+  
+  .info-panel > div {
+    position: absolute;
+    right: 0;
+    color: black;
+    max-height: 100vh;
+  }
+  
+  h2 {
+    margin: 0; /* Remove default margins if needed */
+    text-align: center;
+  }
+  
+  .side-panel-button {
+    margin-top: 16px; /* Adjust as needed */
+  }
+
+  .next-pose {
+    max-height: 300px; /* Adjust as needed */
+    overflow-y: auto; /* Adds vertical scrollbar if content overflows */
+    padding: 10px; /* Optional: Add padding */
+    background-color: #f8f9fa; /* Optional: Add background color for better visibility */
+    border: 1px solid #ddd; /* Optional: Add border for better separation */
+    border-radius: 5px; /* Optional: Add border radius for rounded corners */
+  }
+  
+  /* Optional: Adjust styling for the list */
+  .pose-panel-list {
+    list-style-type: none; /* Remove default list styling */
+    padding: 0;
+    margin: 0;
+  }
+  
+  .pose-panel-item {
+    padding: 5px 0; /* Adjust spacing as needed */
+    border-bottom: 1px solid #ddd; /* Optional: Add border for separation between items */
+  }
+  
+  .pose-panel-item:last-child {
+    border-bottom: none; /* Remove border from the last item */
+  }
+  
+  a {
+    text-decoration: none;
+    color: white;
+  }
