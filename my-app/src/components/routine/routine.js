@@ -27,7 +27,7 @@ const toggleBodyScroll = (lock) => {
   if (lock) {
     document.body.style.overflowY = "hidden"; // Lock y-scroll only
   } else {
-    document.body.style.overflowY = "auto"; // Unlock y-scroll
+    document.body.style.overflowY = "hidden"; // Unlock y-scroll
   }
   document.body.style.overflowX = "hidden"; // Always lock x-scroll
 };

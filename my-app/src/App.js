@@ -4,7 +4,7 @@ import Yoga from "./components/yoga/yoga.js";
 import Routine from "./components/routine/routine.js";
 import Home from "./components/home/home.js";
 
-import { BrowserRouter as Router, Routes, Route, Link, useLocation } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 
 import { ConvexProvider, ConvexReactClient } from "convex/react";
@@ -22,12 +22,12 @@ function App() {
         <ClerkProvider publishableKey="pk_test_YWN0aXZlLXJvdWdoeS04MS5jbGVyay5hY2NvdW50cy5kZXYk">
           <ConvexProviderWithClerk client={convex} useAuth={useAuth}>
             <Router>
-              <Navigation />
               <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/routine" element={<Routine entries={entries} setEntries={setEntries} />} />
                 <Route path="/canvas" element={<Yoga entries={entries} />} />
               </Routes>
+              <Navigation />
             </Router>
           </ConvexProviderWithClerk>
         </ClerkProvider>
@@ -37,19 +37,27 @@ function App() {
 }
 
 function Navigation() {
-  const location = useLocation();
-  const showLinks = location.pathname === '/' || location.pathname === '/routine';
+  const navigate = useNavigate();
+  const [currentPage, setCurrentPage] = useState("/");
+
+  const handleNextPage = () => {
+    if (currentPage === "/") {
+      setCurrentPage("/routine");
+      navigate("/routine");
+    } else if (currentPage === "/routine") {
+      setCurrentPage("/canvas");
+      navigate("/canvas");
+    }
+  };
 
   return (
-    <>
-      {showLinks && (
-        <div>
-          <Link to="/">To Home</Link> <br />
-          <Link to="/routine">To Routine</Link> <br />
-          <Link to="/canvas">To Yoga</Link>
-        </div>
+    <div>
+      {currentPage !== "/canvas" && (
+        <button className="navigation-button" onClick={handleNextPage}>
+        {currentPage === "/" ? "Go to Routine" : "Go to Yoga"}
+      </button>
       )}
-    </>
+    </div>
   );
 }
 

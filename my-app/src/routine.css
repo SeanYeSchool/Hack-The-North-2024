@@ -4,8 +4,7 @@
     height: 90vh;
     padding: 2rem;
     background-color: #f0f8ff; /* Light sky blue background */
-    overflow-y: auto; /* Allow vertical scroll */
-    border: 1px solid #e6e6fa; /* Lavender border */
+    border: none;
 }
 
 /* Table styles */

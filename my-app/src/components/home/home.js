@@ -8,8 +8,10 @@ import Stack from "react-bootstrap/Stack";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import Image from "react-bootstrap/Image";
 import image from "./yoga-person.png";
+
+import "../../home.css";
+
 export function Temp() {
   const updateUser = useMutation(api.users.updateUser, {});
   updateUser(); //Just going to update the user all the time
@@ -18,7 +20,7 @@ export function Temp() {
 function Home() {
   return (
     <div>
-      Home page
+      <h1>Yoga Yogi</h1>
       <Unauthenticated>
         <Container>
           <Row>
