@@ -22,10 +22,14 @@ model.load_state_dict(torch.load("test_model_80.pt", weights_only=False))
 currentPose = None
 
 @app.route("/setPoseIndex/<string:routine_json>", methods=['GET'])
-def setRoutine(routine_json):
+def setPoseIndex(routine_json):
     global currentPose
     routine_list = json.loads(routine_json)
-    currentPose = routine_list[0]
+    try:
+        currentPose = routine_list[0]
+        return "true"
+    except:
+        return "false"
 
 @app.route("/verifyPose/<string:vectors_json>", methods=['GET'])
 def verifyPose(vectors_json):
@@ -45,7 +49,7 @@ def verifyPose(vectors_json):
         prediction = get_prediction(coords, model)
         return str(prediction==currentPose).lower()
     except:
-        return False
+        return "false"
 
 @app.route("/getComment/<string:comment>")
 def getComment(comment):
