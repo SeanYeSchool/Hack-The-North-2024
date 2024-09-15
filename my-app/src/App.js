@@ -17,6 +17,8 @@ import { ConvexProvider, ConvexReactClient } from "convex/react";
 import { ClerkProvider, useAuth } from "@clerk/clerk-react";
 import { ConvexProviderWithClerk } from "convex/react-clerk";
 
+
+
 const convex = new ConvexReactClient("https://greedy-warbler-756.convex.cloud");
 
 function App() {
@@ -25,7 +27,7 @@ function App() {
   return (
     <div className="App">
       <ConvexProvider client={convex}>
-        <ClerkProvider publishableKey="pk_test_YWN0aXZlLXJvdWdoeS04MS5jbGVyay5hY2NvdW50cy5kZXYk">
+        <ClerkProvider  publishableKey={"pk_test_YWN0aXZlLXJvdWdoeS04MS5jbGVyay5hY2NvdW50cy5kZXYk"}>
           <ConvexProviderWithClerk client={convex} useAuth={useAuth}>
             <Router>
               <Routes>
