@@ -31,6 +31,7 @@ function Yoga({ entries }) {
           } else {
             // Stop the timer if the last position is finished
             clearInterval(timer);
+            <TextToSpeech text={"Thanks for completing the pose for me!"} />
             return 0; // Ensure countdown doesn't go negative
           }
         } else {

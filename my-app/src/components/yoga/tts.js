@@ -7,27 +7,49 @@ const TextToSpeech = ({ text }) => {
 
   useEffect(() => {
     const synth = window.speechSynthesis;
-    const u = new SpeechSynthesisUtterance(text);
 
+    const u = new SpeechSynthesisUtterance(text);
+    u.voice = voice; // Set the selected voice
     setUtterance(u);
 
     return () => {
       synth.cancel();
     };
-  }, [text]);
+  }, [text, voice]);
+
+  useEffect(() => {
+    if (utterance) {
+      handlePlay(); // Automatically play when utterance is updated
+    }
+  }, [utterance]);
 
   const handlePlay = () => {
     const synth = window.speechSynthesis;
 
-    // if (isPaused) {
-    synth.resume();
-    // }
+    if (isPaused) {
+      synth.resume();
+    } else {
+      if (utterance) {
+        synth.speak(utterance);
+      }
+    }
 
-    synth.speak(utterance);
-
-    // setIsPaused(false);
+    setIsPaused(false);
   };
 
+
+//   const handlePlay = () => {
+//     const synth = window.speechSynthesis;
+
+//     if (isPaused) {
+//     synth.resume();
+//     }
+
+//     synth.speak(utterance);
+
+//     setIsPaused(false);
+//   };
+  
   const handlePause = () => {
     const synth = window.speechSynthesis;
 
@@ -49,23 +71,27 @@ const TextToSpeech = ({ text }) => {
     setVoice(voices.find((v) => v.name === event.target.value));
   };
 
-  return (
-    <><div>
-          <label>
-              Voice:
-              <select value={voice?.name} onChange={handleVoiceChange}>
-                  {window.speechSynthesis.getVoices().map((voice) => (
-                      <option key={voice.name} value={voice.name}>
-                          {voice.name}
-                      </option>
-                  ))}
-              </select>
-          </label>
-      </div><br /><div>
-              <div className="handlePlay"></div>
-              <button onClick={handleStop}>Stop</button>
-          </div></>
-  );
+//   return (
+//     // <><div>
+//     //       <label>
+//     //           Voice:
+//     //           <select value={voice?.name} onChange={handleVoiceChange}>
+//     //               {window.speechSynthesis.getVoices().map((voice) => (
+//     //                   <option key={voice.name} value={voice.name}>
+//     //                       {voice.name}
+//     //                   </option>
+//     //               ))}
+//     //           </select>
+//     //       </label>
+//     //   </div><br /><div>
+//     //         <button onClick={handlePause}>Pause</button>
+//     //         <button onClick={handlePlay}>Start</button>
+//     //         <button>Hello</button>
+//     //         {handlePlay}
+//     //           {/* <div className="handlePlay"></div>
+//     //           <button onClick={handleStop}>Stop</button> */}
+//     //       </div></>
+//   );
 };
 
 export default TextToSpeech;
