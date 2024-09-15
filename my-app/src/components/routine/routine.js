@@ -19,6 +19,7 @@ const customModalStyles = {
     padding: "20px",
     borderRadius: "8px",
     overflow: "hidden", // Hide overflow to prevent scrollbars in modal
+    fontFamily: "karla-font"
   },
 };
 
@@ -163,7 +164,7 @@ function Routine({ entries, setEntries, landmarks, setLandmarks}) {
               isModal={true}
             />
           </label>
-          <br />
+          <div style={{ margin: '20px 0' }}></div>
           <label>
             Time:
             <Slider time={editTime} setTime={setEditTime} isModal={true} />

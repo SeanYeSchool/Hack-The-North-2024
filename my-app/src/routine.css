@@ -7,6 +7,13 @@
     border: none;
 }
 
+@font-face {
+    font-family: 'karla-font';
+    src: url('./assets/Karla-Regular.ttf');
+    font-weight: normal;
+    font-style: normal;
+  }  
+  
 /* Table styles */
 .table {
     margin-top: 2%;
