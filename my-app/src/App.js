@@ -29,7 +29,7 @@ function App() {
               <Routes>
                 <Route path="/" element = {<Home />} />
                 <Route path="/routine" element={<Routine entries={entries} setEntries={setEntries} />} />
-                <Route path="/canvas" element={<Yoga entries={entries}/>} /> {/* Change the name of the Home component to Canvas */}
+                <Route path="/canvas" element={<Yoga entries={entries}/>} />
               </Routes>
             </div>
           </Router>
