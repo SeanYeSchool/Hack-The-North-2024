@@ -1,34 +1,58 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
-import React from 'react';
-import Button from 'react-bootstrap/Button'
+import React, { useState, useEffect } from 'react';
+import Button from 'react-bootstrap/Button';
 import Canvas from "../canvas/canvas.js";
-import "../../App.css";
+import "../../yoga.css";
 
+function Yoga({ entries }) {
+    const [currentIndex, setCurrentIndex] = useState(0);
+    const [countdown, setCountdown] = useState(entries.length > 0 ? entries[0].time : 0);
 
-const SidePanel = () => {
+    useEffect(() => {
+        if (entries.length > 0 && countdown > 0) {
+            const timer = setInterval(() => {
+                setCountdown(prevCountdown => prevCountdown - 1);
+            }, 1000);
+
+            return () => clearInterval(timer);
+        } else if (countdown === 0 && currentIndex < entries.length - 1) {
+            // Move to the next entry
+            setCurrentIndex(prevIndex => prevIndex + 1);
+            setCountdown(entries[currentIndex + 1].time);
+        }
+    }, [countdown, currentIndex, entries]);
+
     return (
-    <div className="container">   
-    <Button> 
-        Good Morning
-    </Button>
-    <Button>
-        Bad Morning
-    </Button>
-    </div>
-    )
-}
-
-const Yoga = () => {
-    return (
-
-    <div className="container">
-        <div className="frame">
-            <Canvas/>
+        <div className="container">
+            <div className="frame">
+                <Canvas />
+            </div>
+            <div className="current-position">
+                {entries.length > 0 && (
+                    <>
+                        <h2>Current Position: {entries[currentIndex].position}</h2>
+                        <h3>Time Remaining: {countdown} sec</h3>
+                    </>
+                )}
+            </div>
+            <SidePanel entries={entries} />
         </div>
-        <SidePanel/>
-    </div>
     );
 }
 
-
 export default Yoga;
+
+function SidePanel({ entries }) {
+    return (
+        <div className="container">   
+            <Button> 
+                Stop Routine
+            </Button>
+            <div>
+                {entries.map((entry, index) => (
+                    <div key={index}>{entry.position}: {entry.time} sec</div>
+                ))}
+            </div>
+        </div>
+    )
+}

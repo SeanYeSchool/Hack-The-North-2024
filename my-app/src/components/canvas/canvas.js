@@ -10,8 +10,6 @@ function Canvas() {
   var camera = null;
   const [didLoad, setdidLoad] = useState(false);
 
-  const [landmarks, setLandmarks] = useState([]);
-
   function onResults(results) {
     const canvasElement = canvasRef.current;
     const canvasCtx = canvasElement.getContext("2d");
@@ -57,7 +55,6 @@ function Canvas() {
         { visibilityMin: 0.65, color: "white", fillColor: "white" }
       );
 
-      setLandmarks(results.poseLandmarks);
       fetch(
         "http://localhost:5000/setVectors/" +
           JSON.stringify(results.poseLandmarks)

@@ -3,22 +3,19 @@ import "./App.css";
 import Yoga from "./components/yoga/yoga.js";
 import Routine from "./components/routine/routine.js";
 import Home from "./components/home/home.js"
+
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import { useState } from "react";
 
-import { ConvexProvider, ConvexReactClient, Authenticated, Unauthenticated, useQuery, useMutation } from "convex/react";
-import { ClerkProvider, useAuth, SignIn, UserButton } from "@clerk/clerk-react";
+import { ConvexProvider, ConvexReactClient } from "convex/react";
+import { ClerkProvider, useAuth} from "@clerk/clerk-react";
 import { ConvexProviderWithClerk } from "convex/react-clerk";
-
-import { api } from "./convex/_generated/api.js";
 
 const convex = new ConvexReactClient("https://greedy-warbler-756.convex.cloud");
 
-function Temp(){
-  const updateUser = useMutation(api.users.updateUser, {});
-  updateUser(); //Just going to update the user all the time
-}
-
 function App() {
+  const [entries, setEntries] = useState([]);
+
   return (
     <div className="App">
       <ConvexProvider client={convex}>
@@ -26,19 +23,13 @@ function App() {
           <ConvexProviderWithClerk client={convex} useAuth={useAuth}>
           <Router>
             <div>
-              <Link to="/routine">Landing page =\ Routine</Link> <br />
-              <Link to="/canvas">Routine =\ Yoga</Link>
-            <Unauthenticated>
-              <SignIn></SignIn>
-            </Unauthenticated>
-            <Authenticated>
-              <UserButton></UserButton>
-              <Temp></Temp>
-            </Authenticated>
+              <Link to="/"> To Home</Link> <br/ >
+              <Link to="/routine">To Routine</Link> <br />
+              <Link to="/canvas">To Yoga</Link>
               <Routes>
                 <Route path="/" element = {<Home />} />
-                <Route path="/routine" element={<Routine />} />
-                <Route path="/canvas" element={<Yoga />} /> {/* Change the name of the Home component to Canvas */}
+                <Route path="/routine" element={<Routine entries={entries} setEntries={setEntries} />} />
+                <Route path="/canvas" element={<Yoga entries={entries}/>} /> {/* Change the name of the Home component to Canvas */}
               </Routes>
             </div>
           </Router>

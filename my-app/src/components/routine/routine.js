@@ -32,9 +32,7 @@ const toggleBodyScroll = (lock) => {
     document.body.style.overflowX = 'hidden'; // Always lock x-scroll
 };
 
-function Routine() {
-    const [entries, setEntries] = useState([]);
-    const [backendEntries, setBackendEntries] = useState([]);
+function Routine({ entries, setEntries }) {
     const [selectedPosition, setSelectedPosition] = useState('');
     const [time, setTime] = useState("5");
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -50,8 +48,6 @@ function Routine() {
     useEffect(() => {
         // Extract positions and update backendEntries
         const positions = entries.map(entry => entry.position);
-        setBackendEntries(positions);
-        console.log('Backend Entries:', positions);
 
         // Send data to the backend
         fetch("http://localhost:5000/setRoutine/" + (JSON.stringify(positions)))
