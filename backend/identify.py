@@ -24,7 +24,6 @@ def get_prediction(coords, model):
     with torch.no_grad():
         out = model(x, create_edge_index(keypoint_start, keypoint_end), torch.tensor([0]))
         predictions = out.argmax(dim=1).item()
-    print(predictions)
     return (predictions) 
 
 def get_angle_diff(prediction, coords):

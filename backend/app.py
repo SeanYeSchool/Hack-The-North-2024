@@ -21,12 +21,12 @@ model.load_state_dict(torch.load("test_model_80.pt", weights_only=False))
 
 currentPose = None
 
-@app.route("/setPoseIndex/<string:routine_json>", methods=['GET'])
-def setPoseIndex(routine_json):
+@app.route("/setPoseIndex/<string:pose_json>", methods=['GET'])
+def setPoseIndex(pose_json):
     global currentPose
-    routine_list = json.loads(routine_json)
+    pose = str(json.loads(pose_json)).lower().replace(' ', '')
     try:
-        currentPose = routine_list[0]
+        currentPose = pose_map[pose]
         return "true"
     except:
         return "false"
