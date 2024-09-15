@@ -20,6 +20,8 @@ body {
 .saman-font {
     font-family: 'thailand-font';
     font-size: 6.0rem;
+    text-align: left;
+    margin-left: 20%;
 }
 
 /* Style the main container */
@@ -35,7 +37,7 @@ body {
   display: flex;
   position: absolute;
   margin: 1%;
-  top: 35%; /* Center vertically */
+  top: 15%; /* Center vertically */
   right: 7%; /* Center horizontally */
 }
 
@@ -89,6 +91,9 @@ img {
 }
 
 .unauthenticated-image {
+  position: fixed;
+  top: 35%;
+  left: 15%;
   max-width: 80%;
-  height: 100%; /* Ensure image scales properly */
+  height: 60%; /* Ensure image scales properly */
 }

@@ -12,6 +12,7 @@ function Yoga({ entries }) {
   );
   const [poseUpdateCounter, setPoseUpdateCounter] = useState(5); // For pose update interval
   const [messages, setMessage] = useState([]);
+  const [landmarks, setLandmarks] = useState([]);
  
   useEffect(() => {
     const timer = setInterval(() => {
