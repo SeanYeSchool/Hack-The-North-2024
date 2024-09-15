@@ -10,10 +10,11 @@ function Yoga({ entries }) {
   const [countdown, setCountdown] = useState(
     entries.length > 0 ? entries[0].time : 0
   );
-  const [poseUpdateCounter, setPoseUpdateCounter] = useState(5); // For pose update interval
+  const [poseUpdateCounter, setPoseUpdateCounter] = useState(5); // For pose update every 5 seconds
+  const [feedbackCounter, setFeedbackCounter] = useState(10); // For feedback every 10 seconds
   const [messages, setMessage] = useState([]);
   const [landmarks, setLandmarks] = useState([]);
-  
+
   const navigate = useNavigate(); // Initialize useNavigate
 
   useEffect(() => {
@@ -23,7 +24,8 @@ function Yoga({ entries }) {
           if (currentIndex < entries.length - 1) {
             // Move to the next position and reset countdown
             setCurrentIndex((prevIndex) => prevIndex + 1);
-            setPoseUpdateCounter(5); // Reset pose update interval
+            setPoseUpdateCounter(5); // Reset pose update counter to 5 seconds
+            setFeedbackCounter(10); // Reset feedback counter to 10 seconds
             return entries[currentIndex + 1].time; // Set countdown for the next position
           } else {
             // Stop the timer if the last position is finished
@@ -38,11 +40,19 @@ function Yoga({ entries }) {
       setPoseUpdateCounter((prevCounter) => {
         if (prevCounter === 1) {
           sendPoseUpdate();
-          getFeedbackMessage(landmarks);
           verifyPose(landmarks);
           return 5; // Reset counter to send the next pose update in 5 seconds
         } else {
           return prevCounter - 1; // Decrease pose update counter by 1 second
+        }
+      });
+
+      setFeedbackCounter((prevCounter) => {
+        if (prevCounter === 1) {
+          getFeedbackMessage(landmarks);
+          return 10; // Reset feedback counter to 10 seconds
+        } else {
+          return prevCounter - 1; // Decrease feedback counter by 1 second
         }
       });
     }, 1000);
@@ -53,14 +63,14 @@ function Yoga({ entries }) {
   }, [currentIndex, entries, landmarks, navigate]);
 
   const getFeedbackMessage = (landmarks) => {
-    console.log("Sending pose update");
+    console.log("Sending feedback message");
     fetch(
       "http://localhost:5000/getComment/10.0/" +
         JSON.stringify(landmarks)
     )
       .then((response) => response.text())
       .then((data) => {
-        setMessage(prevItems => [...prevItems, data]);
+        setMessage((prevItems) => [...prevItems, data]);
         console.log("Feedback message: ", data);
       })
       .catch((error) => {
@@ -101,7 +111,11 @@ function Yoga({ entries }) {
         countdown={countdown}
         currentIndex={currentIndex}
       />
-      <FeedbackMessage entries={entries} messages={messages} currentIndex={currentIndex}/>
+      <FeedbackMessage
+        entries={entries}
+        messages={messages}
+        currentIndex={currentIndex}
+      />
     </div>
   );
 }
@@ -117,20 +131,27 @@ function SidePanel({ entries, currentIndex, countdown }) {
             <h2 className="position-text">
               Current Position: {entries[currentIndex].position}
             </h2>
-            <div> {currentIndex < entries.length - 1 && 'Next Position: ' + entries[currentIndex+1].position}</div>
+            <div>
+              {currentIndex < entries.length - 1 &&
+                "Next Position: " + entries[currentIndex + 1].position}
+            </div>
             <h3 className="countdown-text">Time Remaining: {countdown} sec</h3>
           </>
         )}
       </div>
-    <a href="/">
-        <Button className="side-panel-button" variant="danger">{countdown === 0 && currentIndex >= entries.length - 1 ? 'Return Home' : 'Stop Routine and Return Home'}</Button>
-    </a>
+      <a href="/">
+        <Button className="side-panel-button" variant="danger">
+          {countdown === 0 && currentIndex >= entries.length - 1
+            ? "Return Home"
+            : "Stop Routine and Return Home"}
+        </Button>
+      </a>
     </div>
   );
 }
 
 function FeedbackMessage({ entries, messages, currentIndex }) {
-    const messagesEndRef = useRef(null);
+  const messagesEndRef = useRef(null);
 
   // Scroll to the bottom when messages change
   useEffect(() => {
