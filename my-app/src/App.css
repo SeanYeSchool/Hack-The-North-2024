@@ -1,12 +1,7 @@
 .container-fluid {
   box-sizing: border-box;
-  position: relative;
-  left: 0;
-  margin-top: 1%;
-  background-color: black;
-  width: 100%;
-  padding: 1%;
-  /* outline: solid white; */
+  background-color: #f8f9fa; /* White background */
+  padding: 2%;
 }
 
 .input_video {
@@ -21,7 +16,7 @@
 
 .output_canvas {
   border-radius: 1%;
-  max-width: 75%;
+  max-width: 100%;
   max-height: 100%;
   /* margin: 2% 1%; */
   display: block;
@@ -32,14 +27,130 @@
 }
 
 .frame {
-  /* background-color: #4a97ab; */
-  align-items: left;
-  width: 100%;
-  max-height: 100%;
+  background-color: #ffffff; /* White background for the frame */
+  border-radius: 8px;
+  padding: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+  width: 73%;
+  display: flex;
+  justify-content: left; /* Center align the canvas */
+  align-items: center; /* Center align the canvas vertically */
 }
+
 
 .App {
 	background-color: black;
   align-items: left;
   width: 100%;
+}
+
+/* Align the countdown and position information */
+.info-panel {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.countdown-text {
+  color: #dc3545; /* Red color for countdown */
+  font-size: 1.5rem;
+}
+
+.position-text {
+  color: #343a40; /* Dark color for position */
+  font-size: 1.25rem;
+}
+
+/* Style for the SidePanel */
+.side-panel {
+  background-color: #ffffff; /* White background for side panel */
+  padding: 1%;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 73%;
+}
+
+.side-panel-button {
+  display: block;
+  width: 100%;
+  margin-bottom: 1%;
+  margin-left: 0%;
+}
+
+.side-panel-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.side-panel-item {
+  padding: 10px 0;
+  border-bottom: 1px solid #e9ecef;
+  color: #495057;
+}
+
+.side-panel-item:last-child {
+  border-bottom: none;
+}
+
+.next-pose {
+  position: fixed; /* Fix the div in place relative to the viewport */
+  right: 0; /* Align it to the right side of the screen */
+  top: 0; 
+  width: 25%; /* Set a width for the div */
+  min-height: 73%;
+  margin-right: 1%;
+  margin-left: 1%;
+  margin-top: 2%;
+  padding: 1%; /* Add some padding inside the div */
+  border-radius: 1%; /* Rounded corners */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for a 3D effect */
+  overflow-y: auto; /* Allow scrolling if content overflows */
+  z-index: 1000; /* Ensure it stays on top of other content */
+}
+
+.next-pose {
+  position: fixed; /* Fix the div in place relative to the viewport */
+  right: 0; /* Align it to the right side of the screen */
+  top: 0; 
+  width: 25%; /* Set a width for the div */
+  min-height: 73%;
+  margin-right: 1%;
+  margin-left: 1%;
+  margin-top: 2%;
+  padding: 1%; /* Add some padding inside the div */
+  border-radius: 8px; /* Rounded corners */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for a 3D effect */
+  overflow-y: auto; /* Allow scrolling if content overflows */
+  z-index: 1000; /* Ensure it stays on top of other content */
+  background-color: #ffffff; /* Ensure background is white */
+}
+
+.next-pose-title {
+  font-size: 1.5rem; /* Set font size for the title */
+  font-weight: bold; /* Make the title bold */
+  margin-bottom: 10px; /* Space below the title */
+  color: #333; /* Darker color for better readability */
+}
+
+.pose-panel-list {
+  list-style-type: none; /* Remove default list bullets */
+  padding: 0; /* Remove default padding */
+  margin: 0; /* Remove default margin */
+}
+
+.pose-panel-item {
+  padding: 10px; /* Add padding to each item */
+  border-bottom: 1px solid #ddd; /* Add a border below each item */
+  font-size: 16px; /* Set font size */
+  transition: box-shadow 0.3s ease; /* Smooth transition for the shadow effect */
+}
+
+.pose-panel-item:last-child {
+  border-bottom: none; /* Remove border from the last item */
+}
+
+.pose-panel-item:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Shadow effect on hover */
+  background-color: #f0f0f0; /* Light background on hover for better visibility */
 }

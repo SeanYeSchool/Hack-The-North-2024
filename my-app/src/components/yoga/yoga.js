@@ -40,32 +40,43 @@ function Yoga({ entries }) {
       <div className="frame">
         <Canvas />
       </div>
-      <div>
-        {entries.length > 0 && (
-          <>
-            <h2>Current Position: {entries[currentIndex].position}</h2>
-            <h3>Time Remaining: {countdown} sec</h3>
-          </>
-        )}
-      </div>
-      <SidePanel entries={entries} />
+      <SidePanel entries={entries} countdown={countdown} currentIndex={currentIndex}/>
+      <NextPose entries={entries}/>
     </div>
   );
 }
 
 export default Yoga;
 
-function SidePanel({ entries }) {
+function SidePanel({ entries, currentIndex, countdown}) {
     return (
-      <div className="container-fluid">
-        <Button>Stop Routine</Button>
-        <div>
-          {entries.map((entry, index) => (
-            <div key={index}>
-              {entry.position}: {entry.time} sec
-            </div>
-          ))}
+      <div className="side-panel">
+         <div className="info-panel">
+        {entries.length > 0 && (
+          <>
+            <h2 className="position-text">Current Position: {entries[currentIndex].position}</h2>
+            <h3 className="countdown-text">Time Remaining: {countdown} sec</h3>
+          </>
+        )}
         </div>
+        <Button className="side-panel-button" variant="danger">
+          Stop Routine
+        </Button>
+      </div>
+    );
+  }
+
+function NextPose({entries}){
+    return (
+      <div className="next-pose">
+        <h2 className="next-pose-title">Pose Queue</h2>
+        <ul className="pose-panel-list">
+          {entries.map((entry, index) => (
+            <li key={index} className="pose-panel-item">
+              {entry.position}: {entry.time} sec
+            </li>
+          ))}
+        </ul>
       </div>
     );
   }
