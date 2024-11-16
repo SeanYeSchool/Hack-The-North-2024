@@ -97,7 +97,8 @@ def getComment(angle_margin_of_error, vectors_json):
             json={ 'request': request },
             headers={ 
                 'Authorization': api_key,
-                'versionID': 'production'
+                'versionID': 'production',
+                'Access-Control-Allow-Origin': '*'
             },
         )
     
@@ -113,9 +114,23 @@ def getComment(angle_margin_of_error, vectors_json):
         message += target_bodypart
         message += " is at an incorrect angle. What feedback can you give for the person to improve?"
         response_json = interact({'type' : 'text', 'payload' : message})
+
+        print("\n", response_json, "\n")
     
     if response_json:
-        return f"GET{response_json[1]['payload']['message']}"
+
+        message = None
+        for item in response_json:
+            if 'message' in item.get('payload', {}):
+                message = item['payload']['message']
+                break
+
+        if message:
+            print(message)
+            return(message)
+
+        # Dictionaries in python have random order so response_json[1] may not always have the required message
+        # return f"GET{response_json[1]['payload']['message']}"
     else:
         return "Keep it up!"
 

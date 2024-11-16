@@ -169,8 +169,8 @@ function FeedbackMessage({ entries, messages, currentIndex }) {
         {messages.map((msg, index) => (
           <>
           <li key={index} className="pose-panel-item">
-            {msg.substring(3)}
-          </li><TextToSpeech text={msg.substring(3)} />
+            {msg}
+          </li><TextToSpeech text={msg} />
           </>
         ))}
         <div ref={messagesEndRef} />
